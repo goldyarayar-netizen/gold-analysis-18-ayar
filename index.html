@@ -1513,46 +1513,6 @@ async function enableNotifications() {
     }
 }
 
-// ============================================================
-// 🔔 NOTIFICATION CONTROLS
-// ============================================================
-
-async function toggleNotifications() {
-    if (NotificationSystem.isEnabled) {
-        NotificationSystem.disable();
-    } else {
-        await NotificationSystem.enable();
-    }
-    
-    // آپدیت دکمه
-    const btn = document.getElementById('notificationBtn');
-    if (btn) {
-        btn.className = `btn ${NotificationSystem.isEnabled ? 'btn-success' : 'btn-outline'}`;
-        btn.title = NotificationSystem.isEnabled ? 'غیرفعال کردن اعلان‌ها' : 'فعال کردن اعلان‌ها';
-        btn.innerHTML = `
-            <span>${NotificationSystem.isEnabled ? '🔔' : '🔕'}</span>
-            <span style="font-size:0.85rem;">${NotificationSystem.isEnabled ? 'فعال' : 'غیرفعال'}</span>
-        `;
-    }
-}
-
-// تست دستی اعلان
-function testNotification() {
-    if (!NotificationSystem.isEnabled) {
-        showNotification('⚠️ ابتدا اعلان‌ها را فعال کنید', 'error');
-        return;
-    }
-    
-    const testSignal = {
-        type: 'buy',
-        priority: 'high',
-        title: '🟢 تست: فرصت خرید عالی!',
-        description: 'این یک اعلان تستی است.\nاگر این پیام را می‌بینید، اعلان‌ها درست کار می‌کنند! ✅'
-    };
-    
-    NotificationSystem.sendSignalNotification(testSignal);
-}
-
 
 
 
