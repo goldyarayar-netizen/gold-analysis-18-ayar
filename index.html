@@ -56,6 +56,7 @@
         [data-theme="light"] body::before { opacity: 0.3; }
         [data-theme="light"] body::after { opacity: 0.2; }
 
+        /* ===== SIDEBAR ===== */
         .sidebar {
             position: fixed; right: 0; top: 0;
             width: var(--sidebar-width); height: 100vh;
@@ -82,15 +83,18 @@
         .nav-item.active { background: linear-gradient(135deg, var(--accent-blue), #2563eb); color: white; font-weight: 600; box-shadow: 0 4px 12px rgba(59,130,246,0.4); }
         .nav-icon { font-size: 1.3rem; width: 1.8rem; }
 
+        /* ===== MAIN ===== */
         .main-content { margin-right: var(--sidebar-width); padding: 2rem; min-height: 100vh; position: relative; z-index: 1; }
         @media (max-width: 968px) { .main-content { margin-right: 0; padding: 1rem; } }
 
+        /* ===== TOPBAR ===== */
         .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding: 1.2rem 1.5rem; background: var(--bg-card); border-radius: 1rem; border: 1px solid var(--border-color); backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
         .hamburger { display: none; font-size: 1.8rem; cursor: pointer; padding: 0.5rem; color: var(--accent-gold); transition: transform 0.3s; }
         .hamburger:hover { transform: rotate(90deg); }
         @media (max-width: 968px) { .hamburger { display: block; } }
         .topbar-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
 
+        /* ===== BUTTONS ===== */
         .btn { padding: 0.7rem 1.4rem; border: none; border-radius: 0.75rem; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.6rem; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
         .btn-primary { background: linear-gradient(135deg, var(--accent-blue), #2563eb); color: white; }
         .btn-success { background: linear-gradient(135deg, var(--accent-green), #059669); color: white; }
@@ -100,6 +104,7 @@
         .btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
         .btn:active { transform: translateY(-1px); }
 
+        /* ===== THEME TOGGLE ===== */
         .theme-toggle { width: 56px; height: 30px; background: var(--bg-card); border-radius: 15px; position: relative; cursor: pointer; border: 2px solid var(--border-color); transition: all 0.3s; }
         .theme-toggle:hover { border-color: var(--accent-gold); }
         .theme-toggle-slider { width: 24px; height: 24px; background: linear-gradient(135deg, var(--accent-gold), #f59e0b); border-radius: 50%; position: absolute; top: 1px; right: 1px; transition: transform 0.3s; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
@@ -107,6 +112,7 @@
 
         .credit-badge { background: linear-gradient(135deg, var(--accent-gold), #f59e0b); color: #000; padding: 0.6rem 1.2rem; border-radius: 2rem; font-weight: bold; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.6rem; box-shadow: 0 4px 12px rgba(251,191,36,0.4); }
 
+        /* ===== CARDS ===== */
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
         @media (max-width: 768px) { .cards-grid { grid-template-columns: 1fr; } }
         .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 1.2rem; padding: 1.8rem; transition: all 0.4s; backdrop-filter: blur(10px); position: relative; overflow: hidden; }
@@ -119,6 +125,7 @@
         .price-value { font-size: 2.2rem; font-weight: bold; background: linear-gradient(135deg, var(--accent-gold), #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; margin: 1.5rem 0; filter: drop-shadow(0 2px 4px rgba(251,191,36,0.3)); }
         .price-label { text-align: center; color: var(--text-secondary); font-size: 0.95rem; font-weight: 500; }
 
+        /* ===== SIGNALS ===== */
         .signal-buy, .signal-sell, .signal-hold, .signal-warning {
             padding: 1.2rem; border-radius: 0.9rem; text-align: center; font-weight: bold; margin-top: 1.5rem; font-size: 1.05rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
@@ -158,8 +165,10 @@
         @keyframes pulse-green { 0%,100% { box-shadow: 0 0 20px rgba(16,185,129,0.3); transform: scale(1); } 50% { box-shadow: 0 0 35px rgba(16,185,129,0.7); transform: scale(1.02); } }
         @keyframes pulse-red { 0%,100% { box-shadow: 0 0 20px rgba(239,68,68,0.3); transform: scale(1); } 50% { box-shadow: 0 0 35px rgba(239,68,68,0.7); transform: scale(1.02); } }
 
+        /* ===== CHART ===== */
         .chart-container { position: relative; height: 220px; margin-top: 1.5rem; }
 
+        /* ===== MODAL ===== */
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.75); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(8px); }
         .modal.show { display: flex; }
         .modal-content { background: var(--bg-secondary); padding: 2.5rem; border-radius: 1.5rem; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; border: 2px solid var(--border-color); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
@@ -175,12 +184,14 @@
         .error { background: rgba(239,68,68,0.15); border-color: var(--accent-red); color: var(--accent-red); }
         .info-box { background: rgba(59,130,246,0.1); border-color: var(--accent-blue); font-size: 0.9rem; line-height: 1.7; }
 
+        /* ===== ALGO CARDS ===== */
         .algo-card { background: var(--bg-card); padding: 1rem; border-radius: 0.75rem; margin-bottom: 1rem; border: 1px solid var(--border-color); transition: all 0.3s; }
         .algo-card:hover { border-color: var(--accent-gold); box-shadow: 0 4px 12px rgba(251,191,36,0.15); }
         .algo-title { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.6rem; font-weight: 500; }
         .algo-value { font-size: 1.3rem; font-weight: bold; color: var(--accent-gold); }
         .market-value { background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(59,130,246,0.15)); border: 2px solid var(--accent-blue); padding: 1rem; border-radius: 0.75rem; margin-top: 1.5rem; }
 
+        /* ===== ANALYSIS CARDS (screenshot style) ===== */
         .analysis-card { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 1.2rem; padding: 0; overflow: hidden; transition: all 0.3s; margin-bottom: 1.5rem; }
         .analysis-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
         .analysis-header { background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(245,158,11,0.1)); padding: 1.5rem; border-bottom: 2px solid var(--border-color); display: flex; align-items: center; gap: 0.75rem; }
@@ -188,6 +199,7 @@
         .analysis-title { font-size: 1.2rem; font-weight: bold; color: var(--text-primary); }
         .analysis-body { padding: 1.5rem; }
 
+        /* price-comparison: 2 boxes side by side (like screenshot) */
         .price-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
         @media (max-width: 500px) { .price-comparison { grid-template-columns: 1fr; } }
         .price-box { background: var(--bg-primary); padding: 1.2rem; border-radius: 0.75rem; border: 2px solid var(--border-color); text-align: center; }
@@ -197,6 +209,7 @@
         .price-box-value { font-size: 1.4rem; font-weight: bold; color: var(--accent-gold); }
         .price-box-unit { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem; }
 
+        /* difference badge: big colored box */
         .difference-box { background: var(--bg-primary); border: 2px solid var(--border-color); border-radius: 0.75rem; padding: 1rem 1.2rem; margin: 1rem 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
         .difference-left { display: flex; flex-direction: column; gap: 0.2rem; }
         .difference-value-big { font-size: 1.6rem; font-weight: bold; }
@@ -206,12 +219,15 @@
         .difference-arrow { font-size: 1.2rem; }
         .difference-right { text-align: left; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
 
+        /* interpretation box */
         .interpretation { background: rgba(59,130,246,0.05); border-right: 4px solid var(--accent-blue); padding: 1rem 1.2rem; border-radius: 0 0.5rem 0.5rem 0; margin-top: 1rem; font-size: 0.9rem; line-height: 1.7; color: var(--text-secondary); }
         .interpretation-title { font-weight: bold; color: var(--accent-blue); margin-bottom: 0.4rem; font-size: 0.95rem; }
 
+        /* ===== DISCLAIMER ===== */
         .disclaimer { background: linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.05)); border: 2px solid var(--accent-red); border-radius: 0.9rem; padding: 1.2rem; margin-bottom: 2rem; font-size: 0.9rem; line-height: 1.7; color: var(--text-secondary); }
         .disclaimer-title { font-weight: bold; color: var(--accent-red); margin-bottom: 0.5rem; font-size: 1rem; }
 
+        /* ===== SIGNAL CARD (for signals page) ===== */
         .signal-card { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 1rem; padding: 1.5rem; margin-bottom: 1rem; transition: all 0.3s; }
         .signal-card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
         .signal-card.high-buy { border-color: var(--accent-green); background: linear-gradient(135deg, rgba(16,185,129,0.08), var(--bg-card)); }
@@ -226,6 +242,7 @@
         .signal-priority-badge.medium { background: rgba(251,191,36,0.2); color: var(--accent-gold); }
         .signal-priority-badge.low { background: rgba(59,130,246,0.2); color: var(--accent-blue); }
 
+        /* ===== NOTIFICATION ===== */
         .notification { position: fixed; top: 2rem; left: 50%; transform: translateX(-50%) translateY(-120px); background: var(--bg-secondary); border: 2px solid var(--border-color); padding: 1.2rem 1.8rem; border-radius: 1rem; box-shadow: 0 12px 40px rgba(0,0,0,0.4); z-index: 3000; opacity: 0; transition: all 0.4s cubic-bezier(0.68,-0.55,0.265,1.55); max-width: 450px; backdrop-filter: blur(10px); }
         .notification.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
@@ -236,6 +253,7 @@
         .edit-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(251,191,36,0.4); }
         .edit-btn:disabled { background: #4b5563; color: #9ca3af; cursor: not-allowed; }
 
+        /* ===== WELCOME ===== */
         .welcome-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; z-index: 1; }
         .welcome-card { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: 2rem; padding: 3rem; max-width: 600px; text-align: center; backdrop-filter: blur(10px); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
         .welcome-title { font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent-gold), #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
@@ -252,7 +270,7 @@
 </head>
 <body>
 
-<!-- welcome Screen -->
+<!-- Welcome Screen -->
 <div id="welcomeScreen" class="welcome-screen" style="display:none;">
     <div class="welcome-card">
         <div class="logo-icon" style="font-size:4rem;margin-bottom:1rem;">💎</div>
@@ -265,6 +283,7 @@
     </div>
 </div>
 
+<!-- Sidebar -->
 <div class="sidebar hidden" id="sidebar">
     <div class="logo"><span class="logo-icon">💎</span><span class="logo-text">گلدیار پرو</span></div>
     <div class="user-info" id="userInfo"></div>
@@ -276,6 +295,7 @@
     <div style="margin-top:2rem;"><button class="btn btn-danger" onclick="logout()" style="width:100%;"><span>🚪</span><span>خروج</span></button></div>
 </div>
 
+<!-- Main Content -->
 <div class="main-content" id="mainContent" style="display:none;">
     <div class="topbar">
         <div style="display:flex;align-items:center;gap:1rem;">
@@ -291,8 +311,10 @@
     <div id="pageContent"></div>
 </div>
 
+<!-- Notification -->
 <div class="notification" id="notification"></div>
 
+<!-- Auth Modal -->
 <div id="authModal" class="modal">
     <div class="modal-content">
         <div class="modal-header"><h2 id="authTitle">ورود</h2><span class="modal-close" onclick="closeModal('authModal')">×</span></div>
@@ -304,6 +326,7 @@
     </div>
 </div>
 
+<!-- Edit Price Modal -->
 <div id="editPriceModal" class="modal">
     <div class="modal-content">
         <div class="modal-header"><h2 id="editPriceTitle">ویرایش قیمت</h2><span class="modal-close" onclick="closeModal('editPriceModal')">×</span></div>
@@ -315,6 +338,9 @@
 </div>
 
 <script>
+// ============================================================
+// CONFIG & STATE
+// ============================================================
 const WORKER_API_URL = 'https://fancy-cloud-73d3.yousef7777t.workers.dev/api/price';
 const HISTORY_API_URL = 'https://goldyar-collector.yousef7777t.workers.dev/history';
 
@@ -359,6 +385,9 @@ let app = {
     customAlerts: JSON.parse(localStorage.getItem('custom_alerts') || '[]')
 };
 
+// ============================================================
+// UTILITY
+// ============================================================
 function formatNumber(n) { return new Intl.NumberFormat('fa-IR').format(Math.round(n)); }
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('show'); }
 function toggleTheme() { app.theme = app.theme === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', app.theme); localStorage.setItem('theme', app.theme); }
@@ -369,6 +398,9 @@ function showNotification(msg, type = 'success') {
 }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
 
+// ============================================================
+// AUTH
+// ============================================================
 function showAuth(mode) {
     app.authMode = mode;
     document.getElementById('authTitle').textContent = mode === 'login' ? 'ورود به حساب' : 'ثبت‌نام رایگان';
@@ -416,7 +448,7 @@ function initDashboard() {
     document.getElementById('mainContent').style.display = 'block';
     document.getElementById('sidebar').classList.remove('hidden');
     updateUserInfo();
-    calculateSignals();
+    calculateSignals();   // ✅ محاسبه سیگنال‌ها هنگام شروع
     renderPage();
 }
 function updateUserInfo() {
@@ -425,6 +457,9 @@ function updateUserInfo() {
         <div class="user-status">⭐ افتتاحیه - پرو رایگان</div>`;
 }
 
+// ============================================================
+// PAGE SWITCHING
+// ============================================================
 function switchPage(page) {
     app.currentPage = page;
     document.querySelectorAll('.nav-item').forEach(i => { i.classList.remove('active'); if (i.dataset.page === page) i.classList.add('active'); });
@@ -434,12 +469,16 @@ function switchPage(page) {
     if (window.innerWidth <= 968) document.getElementById('sidebar').classList.remove('show');
 }
 
+// ============================================================
+// FETCH LIVE PRICES
+// ============================================================
 async function fetchLivePrices() {
     showNotification('در حال دریافت قیمت‌های جدید...', 'info');
     try {
         const res = await fetch(WORKER_API_URL, { cache: 'no-store' });
         if (!res.ok) throw new Error('خطا');
         const data = await res.json();
+        console.log('📊 داده دریافتی:', data);
         let updated = false;
         const map = { 'انس_طلا':'goldPrice', 'انس_نقره':'silverPrice', 'دلار':'usdRate', 'مثقال_طلا':'mesghalMarket', 'طلای_18_عیار':'geram18Market', 'سکه_تمام':'coinPrice', 'بورس_تهران':'bourse', 'نفت_برنت':'brent', 'تتر':'tether', 'بیت_کوین':'btc' };
         const cellMap = { goldPrice:'gold-price', silverPrice:'silver-price', usdRate:'usd-price', mesghalMarket:'mesghal-price', geram18Market:'gold18-price', coinPrice:'coin-price', bourse:'bourse-price', brent:'brent-price', tether:'tether-price', btc:'btc-price' };
@@ -452,7 +491,8 @@ async function fetchLivePrices() {
                 updated = true;
             }
         }
-        
+        // Silver and Dirham come from API now
+        // Dirham calc
         if (app.prices.usdRate) {
             app.prices.dirhamRate = Math.round(app.prices.usdRate * 0.272);
             updateTableCell('dirham-price', formatNumber(app.prices.dirhamRate / 10));
@@ -471,12 +511,10 @@ async function fetchLivePrices() {
             const te = document.getElementById('lastUpdateTime');
             if (te) te.innerHTML = `📡 آخرین به‌روزرسانی: <strong style="color:var(--accent-gold);">${dateStr}</strong> ساعت <strong style="color:var(--accent-gold);">${timeStr}</strong>`;
 
-            calculateSignals();
-            checkAndNotifySignals();
-            checkCustomAlerts();
+            calculateSignals();   // ✅ محاسبه سیگنال‌ها بعد از update
             showNotification('✅ قیمت‌ها به‌روزرسانی شد');
             if (app.currentPage === 'prices') setTimeout(renderCharts, 100);
-            if (app.currentPage === 'signals') renderPage();
+            if (app.currentPage === 'signals') renderPage();   // ✅ refresh signals page
         } else { showNotification('⚠️ داده جدیدی دریافت نشد', 'error'); }
     } catch (e) { console.error(e); showNotification('❌ خطا در اتصال به سرور', 'error'); }
 }
@@ -486,6 +524,9 @@ function updateTableCell(id, value) {
     if (c) { c.style.background = 'rgba(251,191,36,0.3)'; c.textContent = value; setTimeout(() => c.style.background = '', 600); }
 }
 
+// ============================================================
+// PRICE EDIT
+// ============================================================
 function showEditPrice(key, title, val, unit) {
     app.editingPrice = { key, title, unit };
     document.getElementById('editPriceTitle').textContent = `ویرایش ${title}`;
@@ -504,6 +545,9 @@ function saveEditedPrice() {
     renderPage();
 }
 
+// ============================================================
+// CALCULATE (تحلیل)
+// ============================================================
 function calculate() {
     const p = app.prices;
     const mesghalTheo = (p.goldPrice * p.usdRate) / 9.5742;
@@ -542,11 +586,15 @@ function calculate() {
     return { mesghalTheo, diffMesghal, mesghalPercent, geram18Theo1, geram18Theo2, geram18Theo3, geram18Avg, diffGeram18, coinRatio, coinSignal, gsRatio, realUsdPrice, usdDiff, usdSignal, dirhamUsdCalc, dirhamUsdDiff, dirhamUsdSignal, uaeGold18Calc, uaeGoldDiff, uaeGoldSignal, uaeGoldSignalText };
 }
 
+// ============================================================
+// ✅ CALCULATE SIGNALS — این تابع قبلاً نداشتید!
+// ============================================================
 function calculateSignals() {
     app.signals = [];
     const c = calculate();
     const p = app.prices;
 
+    // --- مثقال ---
     if (c.diffMesghal > 10000000) {
         app.signals.push({ type:'buy', priority:'high', title:'🟢 بهترین موقعیت خرید مثقال طلا', description:`قیمت تئوری ${formatNumber(c.mesghalTheo/10)} تومان، بازار ${formatNumber(p.mesghalMarket/10)} تومان — اختلاف ${formatNumber(Math.abs(c.diffMesghal)/10)} تومان` });
     } else if (c.diffMesghal > 5000000) {
@@ -557,6 +605,7 @@ function calculateSignals() {
         app.signals.push({ type:'sell', priority:'medium', title:'🔴 موقعیت فروش متوسط مثقال', description:`بازار ${formatNumber(Math.abs(c.diffMesghal)/10)} تومان بالاتر از تئوری` });
     }
 
+    // --- طلای 18 ---
     if (c.diffGeram18 > 3000000) {
         app.signals.push({ type:'buy', priority:'high', title:'🟢 بهترین موقعیت خرید طلای 18 عیار', description:`میانگین 3 الگوریتم: ${formatNumber(c.geram18Avg/10)} تومان، بازار: ${formatNumber(p.geram18Market/10)} تومان` });
     } else if (c.diffGeram18 > 1000000) {
@@ -565,30 +614,35 @@ function calculateSignals() {
         app.signals.push({ type:'sell', priority:'high', title:'🔴 موقعیت فروش طلای 18 عیار', description:`بازار ${formatNumber(Math.abs(c.diffGeram18)/10)} تومان بالاتر از میانگین الگوریتم‌ها` });
     }
 
+    // --- سکه/طلا ---
     if (c.coinSignal === 'buy_coin') {
         app.signals.push({ type:'buy', priority:'high', title:'🟢 خرید سکه - نسبت پایین', description:`نسبت سکه به طلا: ${c.coinRatio} (کمتر از ۹.۷ = فرصت خرید سکه)` });
     } else if (c.coinSignal === 'buy_gold') {
         app.signals.push({ type:'sell', priority:'medium', title:'🔴 فروش سکه / خرید طلا', description:`نسبت سکه به طلا: ${c.coinRatio} (بیشتر از ۱۱.۳ = سکه گران)` });
     }
 
+    // --- طلا/نقره ---
     if (parseFloat(c.gsRatio) < 60) {
         app.signals.push({ type:'buy', priority:'low', title:'🔵 نقره نسبتاً ارزان است', description:`نسبت طلا به نقره: ${c.gsRatio} (کمتر از ۶۰)` });
     } else if (parseFloat(c.gsRatio) > 80) {
         app.signals.push({ type:'buy', priority:'low', title:'🔵 نقره فرصت خرید دارد', description:`نسبت طلا به نقره: ${c.gsRatio} (بیشتر از ۸۰ = نقره ارزان)` });
     }
 
+    // --- دلار واقعی ---
     if (c.usdSignal === 'negative_bubble') {
         app.signals.push({ type:'buy', priority:'high', title:'🟢 حباب منفی - فرصت خرید طلا', description:'دلار بیش از حد گران است. قیمت واقعی دلار از طلا کمتر است.' });
     } else if (c.usdSignal === 'positive_bubble') {
         app.signals.push({ type:'sell', priority:'high', title:'🔴 حباب مثبت - احتیاط کنید', description:'دلار بیش از حد ارزان است نسبت به طلا.' });
     }
 
+    // --- درهم / دلار ---
     if (c.dirhamUsdSignal === 'expensive') {
         app.signals.push({ type:'sell', priority:'medium', title:'🔴 دلار گران است از درهم', description:`دلار محاسبه شده از درهم: ${formatNumber(c.dirhamUsdCalc/10)} تومان` });
     } else if (c.dirhamUsdSignal === 'cheap') {
         app.signals.push({ type:'buy', priority:'medium', title:'🟢 دلار ارزان است از درهم', description:`دلار محاسبه شده از درهم: ${formatNumber(c.dirhamUsdCalc/10)} تومان` });
     }
 
+    // --- طلای امارات ---
     if (c.uaeGoldDiff > 9000000) {
         app.signals.push({ type:'buy', priority:'high', title:'🟢 موقعیت عالی خرید طلا از ایران', description:`طلای امارات ${formatNumber(Math.abs(c.uaeGoldDiff)/10)} تومان گران‌تر از ایران` });
     } else if (c.uaeGoldDiff > 7000000) {
@@ -601,394 +655,26 @@ function calculateSignals() {
         app.signals.push({ type:'sell', priority:'medium', title:'🔴 فروش طلا به امارات', description:`اختلاف: ${formatNumber(Math.abs(c.uaeGoldDiff)/10)} تومان` });
     }
 
+    // Sort: high first
     const order = { high:0, medium:1, low:2 };
     app.signals.sort((a, b) => (order[a.priority] || 2) - (order[b.priority] || 2));
 }
 
-async function requestNotificationPermission() {
-    if (!('Notification' in window)) return false;
-    if (Notification.permission === 'granted') return true;
-    if (Notification.permission !== 'denied') {
-        const permission = await Notification.requestPermission();
-        return permission === 'granted';
-    }
-    return false;
-}
-
-function sendBrowserNotification(title, message, priority = 'medium') {
-    try {
-        const now = Date.now();
-        if (now - app.lastNotificationTime < 30000) return;
-        app.lastNotificationTime = now;
-        
-        if (!app.notificationsEnabled) return;
-        if (Notification.permission !== 'granted') return;
-        
-        const icon = priority === 'high' ? '🔴' : priority === 'medium' ? '🟡' : '🔵';
-        
-        const notification = new Notification(`${icon} ${title}`, {
-            body: message,
-            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">💎</text></svg>',
-            tag: 'goldyar-signal',
-            requireInteraction: priority === 'high',
-            silent: false
-        });
-        
-        notification.onclick = function() {
-            window.focus();
-            switchPage('signals');
-            notification.close();
-        };
-        
-        playNotificationSound(priority);
-    } catch (error) {
-        console.error('خطا در sendBrowserNotification:', error);
-    }
-}
-
-function checkAndNotifySignals() {
-    try {
-        if (!app.notificationsEnabled) return;
-        if (!window.Notification) return;
-        if (Notification.permission !== 'granted') return;
-        if (!app.signals || app.signals.length === 0) return;
-        
-        const highPrioritySignals = app.signals.filter(s => s.priority === 'high');
-        
-        if (highPrioritySignals.length > 0) {
-            const buySignals = highPrioritySignals.filter(s => s.type === 'buy').length;
-            const sellSignals = highPrioritySignals.filter(s => s.type === 'sell').length;
-            
-            if (buySignals > 0) {
-                sendBrowserNotification(
-                    `${buySignals} سیگنال خرید قوی!`,
-                    'سیگنال‌های با اولویت بالا شناسایی شد',
-                    'high'
-                );
-            }
-            
-            if (sellSignals > 0) {
-                sendBrowserNotification(
-                    `${sellSignals} سیگنال فروش مهم!`,
-                    'توجه: سیگنال فروش با اولویت بالا فعال شد',
-                    'high'
-                );
-            }
-        }
-    } catch (error) {
-        console.error('خطا در checkAndNotifySignals:', error);
-    }
-}
-
-function playNotificationSound(priority = 'medium') {
-    if (!app.soundEnabled) return;
-    
-    try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        oscillator.frequency.value = priority === 'high' ? 800 : 600;
-        gainNode.gain.value = 0.3;
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.15);
-    } catch (error) {
-        console.error('خطا در پخش صدا:', error);
-    }
-}
-
-function toggleSound(enabled) {
-    app.soundEnabled = enabled;
-    localStorage.setItem('sound_enabled', enabled ? 'true' : 'false');
-    if (enabled) {
-        playNotificationSound('medium');
-        showNotification('🔊 صدای اعلان فعال شد');
-    } else {
-        showNotification('🔇 صدای اعلان غیرفعال شد');
-    }
-}
-
-function checkCustomAlerts() {
-    if (!app.customAlerts || app.customAlerts.length === 0) return;
-    
-    app.customAlerts.forEach(alert => {
-        if (!alert.active) return;
-        
-        const currentValue = app.prices[alert.priceType];
-        if (!currentValue) return;
-        
-        let triggered = false;
-        let message = '';
-        
-        if (alert.condition === 'above' && currentValue > alert.threshold) {
-            triggered = true;
-            message = `${alert.priceLabel} از ${formatNumber(alert.threshold)} ${alert.unit} عبور کرد!`;
-        } else if (alert.condition === 'below' && currentValue < alert.threshold) {
-            triggered = true;
-            message = `${alert.priceLabel} از ${formatNumber(alert.threshold)} ${alert.unit} پایین‌تر رفت!`;
-        }
-        
-        if (triggered) {
-            sendBrowserNotification(`🔔 هشدار: ${alert.priceLabel}`, message, 'high');
-            alert.active = false;
-            setTimeout(() => {
-                alert.active = true;
-                saveCustomAlerts();
-            }, 300000);
-        }
-    });
-}
-
-function addCustomAlert(priceType, priceLabel, condition, threshold, unit) {
-    const alert = {
-        id: Date.now(),
-        priceType,
-        priceLabel,
-        condition,
-        threshold: parseFloat(threshold),
-        unit,
-        active: true,
-        createdAt: new Date().toISOString()
-    };
-    
-    app.customAlerts.push(alert);
-    saveCustomAlerts();
-    showNotification(`✅ هشدار برای ${priceLabel} اضافه شد`);
-    renderPage();
-}
-
-function removeCustomAlert(id) {
-    app.customAlerts = app.customAlerts.filter(a => a.id !== id);
-    saveCustomAlerts();
-    showNotification('🗑️ هشدار حذف شد');
-    renderPage();
-}
-
-function saveCustomAlerts() {
-    localStorage.setItem('custom_alerts', JSON.stringify(app.customAlerts));
-}
-
-async function enableNotifications() {
-    const granted = await requestNotificationPermission();
-    if (granted) {
-        app.notificationsEnabled = true;
-        localStorage.setItem('notifications_enabled', 'true');
-        showNotification('✅ اعلان‌ها فعال شد!');
-        sendBrowserNotification('اعلان‌ها فعال شد! 🎉', 'از این به بعد سیگنال‌های مهم به شما اطلاع داده می‌شود', 'medium');
-        renderPage();
-    } else {
-        showNotification('❌ اجازه اعلان داده نشد', 'error');
-    }
-}
-
-function toggleNotifications(enabled) {
-    app.notificationsEnabled = enabled;
-    localStorage.setItem('notifications_enabled', enabled ? 'true' : 'false');
-    showNotification(enabled ? '✅ اعلان‌ها فعال شد' : '🔕 اعلان‌ها غیرفعال شد');
-}
-
-function testNotification() {
-    sendBrowserNotification('تست اعلان! 🎉', 'اگه این رو می‌بینید، اعلان‌ها درست کار می‌کنن!', 'high');
-    checkAndNotifySignals();
-    showNotification('✅ اعلان تست ارسال شد');
-}
-
-function saveNewAlert() {
-    const priceTypeSelect = document.getElementById('alertPriceType');
-    const priceType = priceTypeSelect.value;
-    const priceLabel = priceTypeSelect.options[priceTypeSelect.selectedIndex].text.split('(')[0].trim();
-    const condition = document.getElementById('alertCondition').value;
-    const threshold = document.getElementById('alertThreshold').value;
-    
-    if (!threshold || parseFloat(threshold) <= 0) {
-        showNotification('❌ مقدار آستانه معتبر نیست', 'error');
-        return;
-    }
-    
-    const unitMap = {
-        goldPrice: 'دلار', silverPrice: 'دلار', usdRate: 'ریال',
-        coinPrice: 'ریال', geram18Market: 'ریال', mesghalMarket: 'ریال',
-        tether: 'ریال', btc: 'دلار'
-    };
-    
-    addCustomAlert(priceType, priceLabel, condition, threshold, unitMap[priceType] || 'واحد');
-    document.getElementById('alertThreshold').value = '';
-}
-
-async function fetchHistory(period = '24h') {
-    try {
-        const res = await fetch(`${HISTORY_API_URL}?period=${period}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error('خطا');
-        const result = await res.json();
-        
-        if (result.success && result.data && result.data.length > 0) {
-            app.chartData = processHistoryData(result.data);
-            app.chartPeriod = period;
-            return true;
-        }
-        return false;
-    } catch (e) {
-        console.error(e);
-        return false;
-    }
-}
-
-function processHistoryData(data) {
-    const processed = {
-        labels: [],
-        gold: [],
-        silver: [],
-        usd: [],
-        gold18: [],
-        coin: [],
-        mesghal: [],
-        tether: [],
-        bourse: [],
-        brent: [],
-        btc: []
-    };
-    
-    data.forEach(item => {
-        const date = new Date(item.timestamp * 1000);
-        const label = app.chartPeriod === '24h' 
-            ? `${date.getHours()}:00`
-            : `${date.getDate()}/${date.getMonth()+1}`;
-        
-        processed.labels.push(label);
-        processed.gold.push(item.gold_ounce || 0);
-        processed.silver.push(item.silver_ounce || 0);
-        processed.usd.push((item.usd_rate || 0) / 10);
-        processed.gold18.push((item.gold18 || 0) / 10);
-        processed.coin.push((item.coin || 0) / 10);
-        processed.mesghal.push((item.mesghal || 0) / 10);
-        processed.tether.push((item.tether || 0) / 10);
-        processed.bourse.push(item.bourse || 0);
-        processed.brent.push(item.brent || 0);
-        processed.btc.push(item.btc || 0);
-    });
-    
-    return processed;
-}
-
-function renderCharts() {
-    const chartMap = {
-        'bourseChart': 'bourse',
-        'goldChart': 'gold',
-        'silverChart': 'silver',
-        'usdChart': 'usd',
-        'gold18Chart': 'gold18',
-        'coinChart': 'coin',
-        'mesghalChart': 'mesghal',
-        'tetherChart': 'tether',
-        'brentChart': 'brent',
-        'btcChart': 'btc'
-    };
-    
-    Object.entries(chartMap).forEach(([canvasId, dataKey]) => {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
-        if (canvas.__chartInstance) { canvas.__chartInstance.destroy(); }
-        
-        const hasData = app.chartData.labels && app.chartData.labels.length > 0;
-        const labels = hasData ? app.chartData.labels : Array(10).fill('');
-        const data = hasData ? app.chartData[dataKey] : Array(10).fill(0).map(() => Math.random()*100+50);
-        
-        const isIncreasing = data.length > 1 && data[data.length-1] > data[0];
-        const borderColor = isIncreasing ? '#10b981' : '#ef4444';
-        const bgColor = isIncreasing ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)';
-        
-        const ctx = canvas.getContext('2d');
-        canvas.__chartInstance = new Chart(ctx, {
-            type: 'line',
-            data: { 
-                labels, 
-                datasets: [{ 
-                    data, 
-                    borderColor, 
-                    backgroundColor: bgColor, 
-                    tension: 0.4, 
-                    fill: true, 
-                    pointRadius: 2,
-                    pointBackgroundColor: borderColor,
-                    borderWidth: 2 
-                }] 
-            },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false, 
-                interaction: { intersect: false, mode: 'index' },
-                plugins: { 
-                    legend: { display: false },
-                    tooltip: {
-                        enabled: true,
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        padding: 12,
-                        titleColor: '#fbbf24',
-                        bodyColor: '#fff',
-                        borderColor: '#fbbf24',
-                        borderWidth: 1,
-                        displayColors: false,
-                        callbacks: {
-                            title: function(context) { return context[0].label; },
-                            label: function(context) { return 'قیمت: ' + formatNumber(context.parsed.y); }
-                        }
-                    }
-                }, 
-                scales: { 
-                    x: { 
-                        display: true,
-                        grid: { display: false },
-                        ticks: {
-                            color: 'var(--text-secondary)',
-                            font: { size: 10 },
-                            maxRotation: 0,
-                            autoSkip: true,
-                            maxTicksLimit: 6
-                        }
-                    }, 
-                    y: { 
-                        display: true,
-                        beginAtZero: false,
-                        grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
-                        ticks: {
-                            color: 'var(--text-secondary)',
-                            font: { size: 10 },
-                            callback: function(value) { return formatNumber(value); },
-                            maxTicksLimit: 5
-                        },
-                        min: Math.min(...data) * 0.999,
-                        max: Math.max(...data) * 1.001
-                    } 
-                }
-            }
-        });
-    });
-}
-
-async function changePeriod(period) {
-    app.chartPeriod = period;
-    showNotification(`در حال بارگذاری ${period}...`, 'info');
-    const success = await fetchHistory(period);
-    if (success) {
-        renderPage();
-        setTimeout(renderCharts, 100);
-        showNotification('✅ نمودارها به‌روزرسانی شد');
-    } else {
-        showNotification('❌ خطا در بارگذاری', 'error');
-    }
-}
-
+// ============================================================
+// RENDER PAGE ROUTER
+// ============================================================
 function renderPage() {
     const content = document.getElementById('pageContent');
-    if (app.currentPage === 'prices') { content.innerHTML = renderPricesPage(); setTimeout(renderCharts, 100); }
+    if (app.currentPage === 'prices')      { content.innerHTML = renderPricesPage();    setTimeout(renderCharts, 100); }
     else if (app.currentPage === 'analysis') { content.innerHTML = renderAnalysisPage(); }
-    else if (app.currentPage === 'signals') { content.innerHTML = renderSignalsPage(); }
+    else if (app.currentPage === 'signals')  { content.innerHTML = renderSignalsPage();  }
     else if (app.currentPage === 'calculator') { content.innerHTML = renderCalculatorPage(); }
-    else if (app.currentPage === 'settings') { content.innerHTML = renderSettingsPage(); }
+    else if (app.currentPage === 'settings')   { content.innerHTML = renderSettingsPage();  }
 }
 
+// ============================================================
+// RENDER: PRICES PAGE
+// ============================================================
 function renderPricesPage() {
     const eb = (key, title, val, unit) => app.isPro
         ? `<button class="edit-btn" onclick="showEditPrice('${key}','${title}',${val},'${unit}')" style="padding:0.4rem 0.8rem;font-size:0.8rem;">✏️ ویرایش</button>`
@@ -1041,6 +727,7 @@ function renderPricesPage() {
 
         <h3 style="margin:2rem 0 1rem;color:var(--accent-gold);">📊 نمای سریع با نمودار</h3>
         
+        <!-- دکمه‌های انتخاب بازه زمانی -->
         <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap;justify-content:center;">
             <button class="btn ${app.chartPeriod==='24h'?'btn-primary':'btn-outline'}" onclick="changePeriod('24h')" style="padding:0.6rem 1.2rem;">24 ساعت</button>
             <button class="btn ${app.chartPeriod==='7d'?'btn-primary':'btn-outline'}" onclick="changePeriod('7d')" style="padding:0.6rem 1.2rem;">7 روز</button>
@@ -1058,14 +745,164 @@ function renderPricesPage() {
         </div>`;
 }
 
+// ============================================================
+// RENDER: ANALYSIS PAGE  (فقط یک نسخه — شبیه عکس شما)
+// ============================================================
 function renderAnalysisPage() {
     const c = calculate();
     const p = app.prices;
-    return `<div class="analysis-card"><div class="analysis-header"><span class="analysis-icon">⚖️</span><span class="analysis-title">تحلیل مثقال طلا</span></div><div class="analysis-body"><div class="price-comparison"><div class="price-box green-border"><div class="price-box-label">قیمت بازار</div><div class="price-box-value">${formatNumber(p.mesghalMarket/10)}</div><div class="price-box-unit">تومان</div></div><div class="price-box blue-border"><div class="price-box-label">قیمت محاسبه شده</div><div class="price-box-value">${formatNumber(c.mesghalTheo/10)}</div><div class="price-box-unit">تومان</div></div></div></div></div>`;
+
+    // Helper: signal box HTML
+    function signalBox(signal, text) {
+        const cls = { best_buy_iran:'signal-best-buy', good_buy_iran:'signal-good-buy', step_buy:'signal-caution', best_sell_iran:'signal-best-sell', normal:'signal-normal' };
+        return `<div class="${cls[signal] || 'signal-normal'}" style="margin-top:1rem;">${text}</div>`;
+    }
+
+    return `
+        <!-- تحلیل مثقال -->
+        <div class="analysis-card">
+            <div class="analysis-header"><span class="analysis-icon">⚖️</span><span class="analysis-title">تحلیل مثقال طلا</span></div>
+            <div class="analysis-body">
+                <div class="price-comparison">
+                    <div class="price-box green-border"><div class="price-box-label">قیمت بازار</div><div class="price-box-value">${formatNumber(p.mesghalMarket/10)}</div><div class="price-box-unit">تومان</div></div>
+                    <div class="price-box blue-border"><div class="price-box-label">قیمت محاسبه شده</div><div class="price-box-value">${formatNumber(c.mesghalTheo/10)}</div><div class="price-box-unit">تومان</div></div>
+                </div>
+                <div class="difference-box">
+                    <div class="difference-left">
+                        <div class="difference-value-big ${c.diffMesghal >= 0 ? 'green' : 'red'}">${formatNumber(Math.abs(c.diffMesghal)/10)} ${c.diffMesghal >= 0 ? '↑' : '↓'}</div>
+                    </div>
+                    <div class="difference-right">اختلاف قیمت تئوری و بازار<br>${c.diffMesghal > 0 ? 'تئوری گران‌تر از بازار' : 'بازار گران‌تر از تئوری'}</div>
+                </div>
+                ${c.diffMesghal > 10000000 ? '<div class="signal-best-buy">🟢 بهترین موقعیت خرید مثقال</div>' :
+                  c.diffMesghal > 5000000  ? '<div class="signal-good-buy">🟡 موقعیت خرید متوسط مثقال</div>' :
+                  c.diffMesghal < -5000000 ? '<div class="signal-best-sell">🔴 موقعیت فروش مثقال</div>' :
+                  '<div class="signal-normal">➡️ وضعیت عادی</div>'}
+                <div class="interpretation"><div class="interpretation-title">💡 توضیح روش:</div>
+                    قیمت تئوری مثقال از فرمول انس طلا و نرخ دلار محاسبه می‌شود.<br>
+                    اگر بازار کمتر باشد → فرصت خرید | اگر بازار بیشتر باشد → فرصت فروش
+                </div>
+            </div>
+        </div>
+
+        <!-- تحلیل طلای 18 عیار -->
+        <div class="analysis-card">
+            <div class="analysis-header"><span class="analysis-icon">💍</span><span class="analysis-title">تحلیل طلای 18 عیار (3 الگوریتم)</span></div>
+            <div class="analysis-body">
+                <div class="price-comparison">
+                    <div class="price-box green-border"><div class="price-box-label">قیمت بازار</div><div class="price-box-value">${formatNumber(p.geram18Market/10)}</div><div class="price-box-unit">تومان/گرم</div></div>
+                    <div class="price-box blue-border"><div class="price-box-label">میانگین 3 الگوریتم</div><div class="price-box-value">${formatNumber(c.geram18Avg/10)}</div><div class="price-box-unit">تومان/گرم</div></div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;margin:0.75rem 0;">
+                    <div class="price-box" style="padding:0.7rem;"><div class="price-box-label" style="font-size:0.75rem;">الگوریتم ۱</div><div style="font-size:1rem;font-weight:bold;color:var(--accent-gold);">${formatNumber(c.geram18Theo1/10)}</div></div>
+                    <div class="price-box" style="padding:0.7rem;"><div class="price-box-label" style="font-size:0.75rem;">الگوریتم ۲</div><div style="font-size:1rem;font-weight:bold;color:var(--accent-gold);">${formatNumber(c.geram18Theo2/10)}</div></div>
+                    <div class="price-box" style="padding:0.7rem;"><div class="price-box-label" style="font-size:0.75rem;">الگوریتم ۳</div><div style="font-size:1rem;font-weight:bold;color:var(--accent-gold);">${formatNumber(c.geram18Theo3/10)}</div></div>
+                </div>
+                <div class="difference-box">
+                    <div class="difference-left"><div class="difference-value-big ${c.diffGeram18 >= 0 ? 'green' : 'red'}">${formatNumber(Math.abs(c.diffGeram18)/10)} ${c.diffGeram18 >= 0 ? '↑' : '↓'}</div></div>
+                    <div class="difference-right">اختلاف میانگین الگوریتم‌ها و بازار</div>
+                </div>
+                ${c.diffGeram18 > 3000000 ? '<div class="signal-best-buy">🟢 بهترین موقعیت خرید طلای 18</div>' :
+                  c.diffGeram18 > 1000000 ? '<div class="signal-good-buy">🟡 موقعیت خرید متوسط</div>' :
+                  c.diffGeram18 < -3000000 ? '<div class="signal-best-sell">🔴 موقعیت فروش طلای 18</div>' :
+                  '<div class="signal-normal">➡️ وضعیت عادی</div>'}
+                <div class="interpretation"><div class="interpretation-title">💡 توضیح روش:</div>میانگین 3 فرمول مختلف محاسبه و مقایسه با قیمت بازار می‌شود.</div>
+            </div>
+        </div>
+
+        <!-- تحلیل طلای 18 امارات (شبیه عکس شما) -->
+        <div class="analysis-card">
+            <div class="analysis-header"><span class="analysis-icon">🇦🇪</span><span class="analysis-title">تحلیل قیمت طلای 18 عیار امارات (درهم)</span></div>
+            <div class="analysis-body">
+                <div class="price-comparison">
+                    <div class="price-box green-border"><div class="price-box-label">قیمت بازار ایران</div><div class="price-box-value">${formatNumber(p.geram18Market/10)}</div><div class="price-box-unit">تومان</div></div>
+                    <div class="price-box blue-border"><div class="price-box-label">قیمت محاسبه شده</div><div class="price-box-value">${formatNumber(c.uaeGold18Calc/10)}</div><div class="price-box-unit">تومان</div></div>
+                </div>
+                <div class="difference-box">
+                    <div class="difference-left">
+                        <div class="difference-value-big ${c.uaeGoldDiff >= 0 ? 'green' : 'red'}">${formatNumber(Math.abs(c.uaeGoldDiff)/10)} ${c.uaeGoldDiff >= 0 ? '↑' : '↓'}</div>
+                    </div>
+                    <div class="difference-right">
+                        درهم امارات<br>
+                        <strong>${formatNumber(p.dirhamRate/10)}</strong> تومان &nbsp; | &nbsp; طلای 18 امارات: <strong>${formatNumber(p.gold18UAE)}</strong> درهم<br>
+                        اختلاف: طلای ${c.uaeGoldDiff > 0 ? 'امارات گران‌تر از ایران' : 'ایران گران‌تر از امارات'}
+                    </div>
+                </div>
+                ${c.uaeGoldDiff > 9000000  ? '<div class="signal-best-buy">🟢 موقعیت خرید از ایران<br><span style="font-size:0.9rem;font-weight:normal;">قیمت محاسبه شده امارات پایین‌تر از بازار ایران است → فرصت خرید خوب</span></div>' :
+                  c.uaeGoldDiff > 7000000  ? '<div class="signal-good-buy">🟢 موقعیت خرید از ایران</div>' :
+                  c.uaeGoldDiff > 3500000  ? '<div class="signal-caution">🟡 خرید پله‌ای از ایران</div>' :
+                  c.uaeGoldDiff < -9000000 ? '<div class="signal-best-sell">🔴 فروش طلا به امارات</div>' :
+                  '<div class="signal-normal">➡️ وضعیت عادی</div>'}
+                <div class="interpretation"><div class="interpretation-title">💡 توضیح روش:</div>
+                    اگر قیمت امارات پایین‌تر باشد → فرصت فروش از ایران<br>
+                    اگر بازار ایران بالاتر باشد → فرصت خرید دارد<br>
+                    سیگنال بر اساس اختلاف بیش از ۷۰۰ هزار تومان تنظیم شده است.
+                </div>
+            </div>
+        </div>
+
+        <!-- نسبت سکه/طلا -->
+        <div class="analysis-card">
+            <div class="analysis-header"><span class="analysis-icon">🪙</span><span class="analysis-title">نسبت سکه به طلا</span></div>
+            <div class="analysis-body">
+                <div class="price-comparison">
+                    <div class="price-box green-border"><div class="price-box-label">نسبت فعلی</div><div class="price-box-value">${c.coinRatio}</div><div class="price-box-unit">سکه ÷ طلای 18</div></div>
+                    <div class="price-box blue-border"><div class="price-box-label">محدوده نرمال</div><div class="price-box-value">۹.۷ – ۱۱.۳</div><div class="price-box-unit">نسبت</div></div>
+                </div>
+                ${c.coinSignal === 'buy_coin' ? '<div class="signal-best-buy">🟢 خرید سکه - نسبت پایین</div>' : c.coinSignal === 'buy_gold' ? '<div class="signal-best-sell">🔴 خرید طلا - سکه گران</div>' : '<div class="signal-normal">➡️ نسبت متعادل</div>'}
+                <div class="interpretation"><div class="interpretation-title">💡 توضیح روش:</div>نسبت زیر ۹.۷ → سکه ارزان → خرید سکه | نسبت بالای ۱۱.۳ → سکه گران → خرید طلای خام</div>
+            </div>
+        </div>
+
+        <!-- نسبت طلا/نقره -->
+        <div class="analysis-card">
+            <div class="analysis-header"><span class="analysis-icon">⚪</span><span class="analysis-title">نسبت طلا به نقره (G/S Ratio)</span></div>
+            <div class="analysis-body">
+                <div class="price-comparison">
+                    <div class="price-box green-border"><div class="price-box-label">نسبت فعلی</div><div class="price-box-value">${c.gsRatio}</div><div class="price-box-unit">طلا ÷ نقره</div></div>
+                    <div class="price-box blue-border"><div class="price-box-label">محدوده نرمال</div><div class="price-box-value">۶۰ – ۸۰</div><div class="price-box-unit">نسبت</div></div>
+                </div>
+                ${parseFloat(c.gsRatio) < 60 ? '<div class="signal-best-buy">🟢 نقره نسبتاً ارزان</div>' : parseFloat(c.gsRatio) > 80 ? '<div class="signal-caution">🟡 نسبت بالا - نقره ارزان‌تر</div>' : '<div class="signal-normal">➡️ نسبت متعادل</div>'}
+                <div class="interpretation"><div class="interpretation-title">💡 توضیح روش:</div>نسبت زیر ۶۰ → نقره ارزان است | نسبت بالای ۸۰ → فرصت خرید نقره دارد</div>
+            </div>
+        </div>
+
+        <!-- تحلیل دلار واقعی -->
+        <div class="analysis-card">
+            <div class="analysis-header"><span class="analysis-icon">💵</span><span class="analysis-title">قیمت واقعی دلار (از طلا)</span></div>
+            <div class="analysis-body">
+                <div class="price-comparison">
+                    <div class="price-box green-border"><div class="price-box-label">دلار بازار</div><div class="price-box-value">${formatNumber(p.usdRate/10)}</div><div class="price-box-unit">تومان</div></div>
+                    <div class="price-box blue-border"><div class="price-box-label">دلار واقعی (از طلا)</div><div class="price-box-value">${formatNumber(c.realUsdPrice/10)}</div><div class="price-box-unit">تومان</div></div>
+                </div>
+                <div class="difference-box">
+                    <div class="difference-left"><div class="difference-value-big ${c.usdDiff >= 0 ? 'green' : 'red'}">${formatNumber(Math.abs(c.usdDiff)/10)} ${c.usdDiff >= 0 ? '↑' : '↓'}</div></div>
+                    <div class="difference-right">اختلاف دلار واقعی و بازار<br>${c.usdDiff > 0 ? 'دلار بازار کمتر از واقعی (حباب منفی)' : 'دلار بازار بیشتر از واقعی'}</div>
+                </div>
+                ${c.usdSignal === 'negative_bubble' ? '<div class="signal-best-buy">🟢 حباب منفی - فرصت خرید طلا</div>' : c.usdSignal === 'positive_bubble' ? '<div class="signal-best-sell">🔴 حباب مثبت - احتیاط کنید</div>' : '<div class="signal-normal">➡️ وضعیت عادی</div>'}
+                <div class="interpretation"><div class="interpretation-title">💡 توضیح روش:</div>قیمت واقعی دلار از نرخ طلای 18 و انس طلا محاسبه می‌شود و با دلار بازار مقایسه.</div>
+            </div>
+        </div>
+
+        <!-- تحلیل درهم -->
+        <div class="analysis-card">
+            <div class="analysis-header"><span class="analysis-icon">🇦🇪</span><span class="analysis-title">تحلیل درهم برای دلار</span></div>
+            <div class="analysis-body">
+                <div class="price-comparison">
+                    <div class="price-box green-border"><div class="price-box-label">دلار بازار</div><div class="price-box-value">${formatNumber(p.usdRate/10)}</div><div class="price-box-unit">تومان</div></div>
+                    <div class="price-box blue-border"><div class="price-box-label">دلار از درهم</div><div class="price-box-value">${formatNumber(c.dirhamUsdCalc/10)}</div><div class="price-box-unit">تومان</div></div>
+                </div>
+                ${c.dirhamUsdSignal === 'expensive' ? '<div class="signal-best-sell">🔴 دلار گران است از درهم</div>' : c.dirhamUsdSignal === 'cheap' ? '<div class="signal-best-buy">🟢 دلار ارزان است از درهم</div>' : '<div class="signal-normal">➡️ قیمت متعادل</div>'}
+                <div class="interpretation"><div class="interpretation-title">💡 توضیح روش:</div>نرخ درهم × ۳.۶۷ = قیمت دلار محاسبه شده و مقایسه با دلار بازار.</div>
+            </div>
+        </div>`;
 }
 
+// ============================================================
+// ✅ RENDER: SIGNALS PAGE
+// ============================================================
 function renderSignalsPage() {
-    if (app.signals.length === 0) calculateSignals();
+    if (app.signals.length === 0) calculateSignals();   // اگر هنوز محاسبه نشده
+
     const cardClass = s => {
         if (s.priority === 'high' && s.type === 'buy')  return 'high-buy';
         if (s.priority === 'high' && s.type === 'sell') return 'high-sell';
@@ -1073,212 +910,187 @@ function renderSignalsPage() {
         return 'low';
     };
     const priorityText = { high:'اولویت بالا', medium:'اولویت متوسط', low:'اولویت پایین' };
-    let signalsHTML = app.signals.map(s => `<div class="signal-card ${cardClass(s)}"><div class="signal-card-header"><span class="signal-priority-badge ${s.priority}">${priorityText[s.priority]}</span></div><div class="signal-card-title" style="color:${s.type==='buy'?'var(--accent-green)':s.type==='sell'?'var(--accent-red)':'var(--accent-gold)'};">${s.title}</div><div class="signal-card-desc">${s.description}</div></div>`).join('');
-    return `<div class="disclaimer"><div class="disclaimer-title">⚠️ سلب مسئولیت</div>این سیگنال‌ها صرفاً اطلاع‌رسانی هستند و <strong>توصیه به خرید یا فروش نیستند</strong>.</div><h3 style="color:var(--accent-gold);margin:1rem 0;">🎯 سیگنال‌های فعال (${app.signals.length})</h3>${signalsHTML}`;
+
+    let signalsHTML = '';
+    if (app.signals.length === 0) {
+        signalsHTML = `<div class="signal-card" style="text-align:center;padding:2.5rem;">
+            <div style="font-size:3rem;margin-bottom:1rem;">📊</div>
+            <div style="color:var(--text-secondary);font-size:1.1rem;">سیگنال‌های فعال نیست<br><span style="font-size:0.9rem;">قیمت‌ها را به‌روز کنید تا سیگنال‌ها نشان داده شود</span></div>
+            <button class="btn btn-primary" onclick="fetchLivePrices()" style="margin-top:1.5rem;"><span>🔄</span><span>به‌روزرسانی قیمت‌ها</span></button>
+        </div>`;
+    } else {
+        signalsHTML = app.signals.map(s => `
+            <div class="signal-card ${cardClass(s)}">
+                <div class="signal-card-header">
+                    <span class="signal-priority-badge ${s.priority}">${priorityText[s.priority]}</span>
+                    ${s.priority === 'high' ? '<span style="font-size:0.8rem;color:var(--text-secondary);">● چشمک زدن فعال</span>' : ''}
+                </div>
+                <div class="signal-card-title" style="color:${s.type==='buy'?'var(--accent-green)':s.type==='sell'?'var(--accent-red)':'var(--accent-gold)'};">${s.title}</div>
+                <div class="signal-card-desc">${s.description}</div>
+            </div>`).join('');
+    }
+
+    return `
+        <div class="disclaimer">
+            <div class="disclaimer-title">⚠️ سلب مسئولیت</div>
+            این سیگنال‌ها صرفاً جنبه اطلاع‌رسانی دارند و <strong>توصیه به خرید یا فروش نیستند</strong>.<br>
+            تصمیم‌گیری نهایی بر عهده شماست. قیمت‌های بازار هر لحظه تغییر می‌کنند.
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.75rem;">
+            <h3 style="color:var(--accent-gold);margin:0;">🎯 سیگنال‌های فعال (${app.signals.length})</h3>
+            <button class="btn btn-outline" onclick="fetchLivePrices()" style="font-size:0.85rem;padding:0.5rem 1rem;"><span>🔄</span><span>به‌روزرسانی</span></button>
+        </div>
+
+        <!-- فیلتر اولویت -->
+        <div style="display:flex;gap:0.6rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+            <span class="signal-priority-badge high" style="font-size:0.8rem;padding:0.3rem 0.7rem;cursor:pointer;">🔴 بالا (${app.signals.filter(s=>s.priority==='high').length})</span>
+            <span class="signal-priority-badge medium" style="font-size:0.8rem;padding:0.3rem 0.7rem;cursor:pointer;">🟡 متوسط (${app.signals.filter(s=>s.priority==='medium').length})</span>
+            <span class="signal-priority-badge low" style="font-size:0.8rem;padding:0.3rem 0.7rem;cursor:pointer;">🔵 پایین (${app.signals.filter(s=>s.priority==='low').length})</span>
+        </div>
+
+        ${signalsHTML}`;
 }
 
+// ============================================================
+// RENDER: CALCULATOR
+// ============================================================
 function renderCalculatorPage() {
-    return `<div class="cards-grid"><div class="card"><div class="card-header"><div class="card-title"><span class="card-icon">🛒</span><span>محاسبه ارزش خام</span></div></div><label style="display:block;margin-bottom:0.5rem;font-weight:600;">وزن (گرم):</label><input type="number" id="rawWeight" value="10" step="0.1"><button class="btn btn-primary" onclick="calculateRaw()" style="width:100%;margin-top:1.5rem;padding:1rem;">💰 محاسبه</button><div id="rawResult"></div></div><div class="card"><div class="card-header"><div class="card-title"><span class="card-icon">💎</span><span>محاسبه قیمت فروش</span></div></div><label style="display:block;margin-bottom:0.5rem;font-weight:600;">وزن (گرم):</label><input type="number" id="sellWeight" value="18.7" step="0.1"><label style="display:block;margin-top:1rem;margin-bottom:0.5rem;font-weight:600;">اجرت (ریال):</label><input type="number" id="wage" value="1500000" step="10000"><label style="display:block;margin-
-    
-    top:1rem;margin-bottom:0.5rem;font-weight:600;">سود (%):</label><input type="number" id="profit" value="7" step="0.1"><label style="display:block;margin-top:1rem;margin-bottom:0.5rem;font-weight:600;">مالیات (%):</label><input type="number" id="tax" value="9" step="0.1"><button class="btn btn-primary" onclick="calculateSell()" style="width:100%;margin-top:1.5rem;padding:1rem;">💎 محاسبه قیمت فروش</button><div id="sellResult"></div></div></div>`;
-}
-
-function renderSettingsPage() {
-    // بررسی پشتیبانی مرورگر
-    const notificationSupported = ('Notification' in window);
-    const notificationPermission = notificationSupported ? Notification.permission : 'unsupported';
-    
     return `
         <div class="cards-grid">
-            <!-- کارت اعلان‌ها -->
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <span class="card-icon">🔔</span>
-                        <span>تنظیمات اعلان</span>
-                    </div>
-                </div>
-                
-                ${!notificationSupported ? 
-                    // اگر مرورگر پشتیبانی نمی‌کند
-                    `<div class="error" style="margin-top:1rem;">
-                        ❌ مرورگر شما از اعلان پشتیبانی نمی‌کند یا فایل را به صورت Local باز کرده‌اید.
-                        <br><br>
-                        <strong>💡 راه‌حل:</strong> فایل را روی یک سرور (مثل Cloudflare Pages) آپلود کنید تا اعلان‌ها فعال شوند.
-                    </div>` 
-                    :
-                    // اگر مرورگر پشتیبانی می‌کند
-                    `<div class="info-box">
-                        <strong>وضعیت اعلان‌های مرورگر:</strong><br>
-                        ${notificationPermission === 'granted' ? '✅ فعال' : 
-                          notificationPermission === 'denied' ? '❌ رد شده' : 
-                          '⚠️ غیرفعال'}
-                    </div>
-                    
-                    ${notificationPermission === 'default' ? 
-                        '<button class="btn btn-primary" onclick="enableNotifications()" style="width:100%;margin-top:1rem;">🔔 فعال‌سازی اعلان‌ها</button>' 
-                        : 
-                        notificationPermission === 'denied' ?
-                        '<div class="error" style="margin-top:1rem;">⚠️ اعلان‌ها مسدود شده‌اند. برای فعال‌سازی، از تنظیمات مرورگر اجازه دهید.</div>' 
-                        :
-                        `<div style="margin-top:1rem;">
-                            <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;">
-                                <input type="checkbox" ${app.notificationsEnabled ? 'checked' : ''} 
-                                       onchange="toggleNotifications(this.checked)" 
-                                       style="width:auto;">
-                                <span>دریافت اعلان برای سیگنال‌های مهم</span>
-                            </label>
-                        </div>`
-                    }
-                    
-                    <div class="interpretation" style="margin-top:1rem;">
-                        <div class="interpretation-title">💡 نکته:</div>
-                        با فعال‌سازی اعلان‌ها، وقتی سیگنال مهمی شناسایی شد - حتی اگه سایت بسته باشه - به شما اطلاع داده میشه!
-                    </div>
-                    
-                    ${notificationPermission === 'granted' ? 
-                        `<button class="btn btn-warning" onclick="testNotification()" 
-                                style="width:100%;margin-top:1rem;">
-                            🧪 تست اعلان
-                        </button>
-                        <div style="margin-top:1rem;">
-                            <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;">
-                                <input type="checkbox" ${app.soundEnabled ? 'checked' : ''} 
-                                       onchange="toggleSound(this.checked)" 
-                                       style="width:auto;">
-                                <span>🔊 پخش صدا هنگام دریافت اعلان</span>
-                            </label>
-                        </div>` 
-                        : 
-                        ''
-                    }`
-                }
+                <div class="card-header"><div class="card-title"><span class="card-icon">🛒</span><span>محاسبه ارزش خام</span></div></div>
+                <label style="display:block;margin-bottom:0.5rem;font-weight:600;">وزن (گرم):</label>
+                <input type="number" id="rawWeight" value="10" step="0.1">
+                <button class="btn btn-primary" onclick="calculateRaw()" style="width:100%;margin-top:1.5rem;padding:1rem;">💰 محاسبه</button>
+                <div id="rawResult"></div>
             </div>
-            
-            <!-- کارت هشدارهای سفارشی -->
             <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <span class="card-icon">⚙️</span>
-                        <span>هشدارهای سفارشی</span>
-                    </div>
-                </div>
-                
-                <div class="info-box" style="margin-bottom:1rem;">
-                    تنظیم کنید که برای چه شرایطی به شما اعلان داده شود.
-                </div>
-                
-                ${!notificationSupported ? 
-                    '<div class="error">❌ هشدارها فقط روی سرور کار می‌کنند</div>' 
-                    :
-                    `<form onsubmit="event.preventDefault(); saveNewAlert();" 
-                           style="display:flex;flex-direction:column;gap:0.75rem;">
-                        <select id="alertPriceType" style="width:100%;">
-                            <option value="goldPrice">انس طلا (دلار)</option>
-                            <option value="silverPrice">انس نقره (دلار)</option>
-                            <option value="usdRate">دلار (ریال)</option>
-                            <option value="coinPrice">سکه (ریال)</option>
-                            <option value="geram18Market">طلای 18 (ریال)</option>
-                            <option value="mesghalMarket">مثقال (ریال)</option>
-                            <option value="tether">تتر (ریال)</option>
-                            <option value="btc">بیت‌کوین (دلار)</option>
-                        </select>
-                        
-                        <select id="alertCondition" style="width:100%;">
-                            <option value="above">بالاتر از</option>
-                            <option value="below">پایین‌تر از</option>
-                        </select>
-                        
-                        <input type="number" id="alertThreshold" 
-                               placeholder="مقدار آستانه" 
-                               step="0.01" required style="width:100%;">
-                        
-                        <button type="submit" class="btn btn-primary" style="width:100%;">
-                            ➕ افزودن هشدار
-                        </button>
-                    </form>
-                    
-                    <div style="margin-top:1.5rem;">
-                        <h4 style="margin-bottom:0.75rem;color:var(--text-secondary);font-size:0.9rem;">
-                            هشدارهای فعال:
-                        </h4>
-                        ${app.customAlerts.length === 0 ? 
-                            '<div style="text-align:center;color:var(--text-secondary);padding:1rem;">هیچ هشداری تنظیم نشده</div>' 
-                            :
-                            app.customAlerts.map(alert => `
-                                <div style="display:flex;justify-content:space-between;align-items:center;
-                                            padding:0.75rem;background:var(--bg-primary);border-radius:0.5rem;
-                                            margin-bottom:0.5rem;border:1px solid var(--border-color);">
-                                    <div style="font-size:0.85rem;">
-                                        <strong>${alert.priceLabel}</strong> 
-                                        ${alert.condition === 'above' ? 'بالاتر از' : 'پایین‌تر از'} 
-                                        <strong style="color:var(--accent-gold);">${formatNumber(alert.threshold)}</strong> 
-                                        ${alert.unit}
-                                    </div>
-                                    <button onclick="removeCustomAlert(${alert.id})" 
-                                            class="btn btn-danger" 
-                                            style="padding:0.3rem 0.6rem;font-size:0.8rem;">
-                                        🗑️
-                                    </button>
-                                </div>
-                            `).join('')
-                        }
-                    </div>`
-                }
-            </div>
-            
-            <!-- کارت اطلاعات حساب -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <span class="card-icon">👤</span>
-                        <span>اطلاعات حساب</span>
-                    </div>
-                </div>
-                <div class="info-box">
-                    <strong>ایمیل:</strong> ${app.user?.email || 'مهمان'}<br>
-                    <strong>وضعیت:</strong> ⭐ پرو فعال (افتتاحیه)<br>
-                    <strong>اعتبار:</strong> رایگان
-                </div>
-            </div>
-            
-            <!-- کارت مزایای پرو -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <span class="card-icon">⭐</span>
-                        <span>مزایای پرو</span>
-                    </div>
-                </div>
-                <div class="info-box">
-                    <strong>قابلیت‌های فعال:</strong><br>
-                    ✅ ویرایش قیمت‌ها<br>
-                    ✅ دسترسی به همه تحلیل‌ها<br>
-                    ✅ سیگنال‌های هوشمند<br>
-                    ✅ اعلان‌های لحظه‌ای<br>
-                    ✅ پشتیبانی اختصاصی
-                </div>
-                <div class="success" style="margin-top:1rem;">
-                    ✅ اشتراک پرو فعال است (افتتاحیه)
-                </div>
+                <div class="card-header"><div class="card-title"><span class="card-icon">💎</span><span>محاسبه قیمت فروش</span></div></div>
+                <label style="display:block;margin-bottom:0.5rem;font-weight:600;">وزن (گرم):</label>
+                <input type="number" id="sellWeight" value="18.7" step="0.1">
+                <label style="display:block;margin-top:1rem;margin-bottom:0.5rem;font-weight:600;">اجرت (ریال):</label>
+                <input type="number" id="wage" value="1500000" step="10000">
+                <label style="display:block;margin-top:1rem;margin-bottom:0.5rem;font-weight:600;">سود (%):</label>
+                <input type="number" id="profit" value="7" step="0.1">
+                <label style="display:block;margin-top:1rem;margin-bottom:0.5rem;font-weight:600;">مالیات (%):</label>
+                <input type="number" id="tax" value="9" step="0.1">
+                <button class="btn btn-primary" onclick="calculateSell()" style="width:100%;margin-top:1.5rem;padding:1rem;">💎 محاسبه قیمت فروش</button>
+                <div id="sellResult"></div>
             </div>
         </div>`;
 }
 
+// ============================================================
+// RENDER: SETTINGS
+// ============================================================
+function renderSettingsPage() {
+    const notificationSupported = typeof Notification !== 'undefined';
+    const notificationPermission = notificationSupported ? Notification.permission : 'unsupported';
+    
+    return `
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-header"><div class="card-title"><span class="card-icon">🔔</span><span>تنظیمات اعلان</span></div></div>
+                <div class="info-box">
+                    <strong>وضعیت اعلان‌های مرورگر:</strong><br>
+                    ${!notificationSupported ? '❌ مرورگر از اعلان پشتیبانی نمی‌کنه' :
+                      notificationPermission === 'granted' ? '✅ فعال' : 
+                      notificationPermission === 'denied' ? '❌ رد شده' : 
+                      '⚠️ غیرفعال'}
+                </div>
+                ${!notificationSupported ? 
+                    '<div class="error" style="margin-top:1rem;">مرورگر شما از اعلان‌ها پشتیبانی نمی‌کنه</div>' :
+                    notificationPermission === 'default' ? 
+                    '<button class="btn btn-primary" onclick="enableNotifications()" style="width:100%;margin-top:1rem;">🔔 فعال‌سازی اعلان‌ها</button>' : 
+                    notificationPermission === 'denied' ?
+                    '<div class="error" style="margin-top:1rem;">برای فعال‌سازی، از تنظیمات مرورگر اجازه دهید</div>' :
+                    `<div style="margin-top:1rem;">
+                        <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;">
+                            <input type="checkbox" ${app.notificationsEnabled ? 'checked' : ''} onchange="toggleNotifications(this.checked)" style="width:auto;">
+                            <span>دریافت اعلان برای سیگنال‌های مهم</span>
+                        </label>
+                    </div>`
+                }
+                <div class="interpretation" style="margin-top:1rem;">
+                    <div class="interpretation-title">💡 نکته:</div>
+                    با فعال‌سازی اعلان‌ها، وقتی سیگنال مهمی شناسایی شد - حتی اگه سایت بسته باشه - به شما اطلاع داده میشه!
+                </div>
+                ${notificationSupported && notificationPermission === 'granted' ? 
+                    `<button class="btn btn-warning" onclick="testNotification()" style="width:100%;margin-top:1rem;">🧪 تست اعلان</button>
+                    <div style="margin-top:1rem;">
+                        <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;">
+                            <input type="checkbox" ${app.soundEnabled ? 'checked' : ''} onchange="toggleSound(this.checked)" style="width:auto;">
+                            <span>🔊 پخش صدا هنگام دریافت اعلان</span>
+                        </label>
+                    </div>` : 
+                    ''}
+            </div>
+            <div class="card">
+                <div class="card-header"><div class="card-title"><span class="card-icon">⚙️</span><span>هشدارهای سفارشی</span></div></div>
+                <div class="info-box" style="margin-bottom:1rem;">
+                    تنظیم کنید که برای چه شرایطی به شما اعلان داده شود.
+                </div>
+                
+                <form onsubmit="event.preventDefault(); saveNewAlert();" style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <select id="alertPriceType" style="width:100%;">
+                        <option value="goldPrice">انس طلا (دلار)</option>
+                        <option value="silverPrice">انس نقره (دلار)</option>
+                        <option value="usdRate">دلار (ریال)</option>
+                        <option value="coinPrice">سکه (ریال)</option>
+                        <option value="geram18Market">طلای 18 (ریال)</option>
+                        <option value="mesghalMarket">مثقال (ریال)</option>
+                        <option value="tether">تتر (ریال)</option>
+                        <option value="btc">بیت‌کوین (دلار)</option>
+                    </select>
+                    
+                    <select id="alertCondition" style="width:100%;">
+                        <option value="above">بالاتر از</option>
+                        <option value="below">پایین‌تر از</option>
+                    </select>
+                    
+                    <input type="number" id="alertThreshold" placeholder="مقدار آستانه" step="0.01" required style="width:100%;">
+                    
+                    <button type="submit" class="btn btn-primary" style="width:100%;">➕ افزودن هشدار</button>
+                </form>
+                
+                <div style="margin-top:1.5rem;">
+                    <h4 style="margin-bottom:0.75rem;color:var(--text-secondary);font-size:0.9rem;">هشدارهای فعال:</h4>
+                    ${!app.customAlerts || app.customAlerts.length === 0 ? 
+                        '<div style="text-align:center;color:var(--text-secondary);padding:1rem;">هیچ هشداری تنظیم نشده</div>' :
+                        app.customAlerts.map(alert => `
+                            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem;background:var(--bg-primary);border-radius:0.5rem;margin-bottom:0.5rem;border:1px solid var(--border-color);">
+                                <div style="font-size:0.85rem;">
+                                    <strong>${alert.priceLabel}</strong> ${alert.condition === 'above' ? 'بالاتر از' : 'پایین‌تر از'} 
+                                    <strong style="color:var(--accent-gold);">${formatNumber(alert.threshold)}</strong> ${alert.unit}
+                                </div>
+                                <button onclick="removeCustomAlert(${alert.id})" class="btn btn-danger" style="padding:0.3rem 0.6rem;font-size:0.8rem;">🗑️</button>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><div class="card-title"><span class="card-icon">👤</span><span>اطلاعات حساب</span></div></div>
+                <div class="info-box"><strong>ایمیل:</strong> ${app.user?.email || 'مهمان'}<br><strong>وضعیت:</strong> ⭐ پرو فعال (افتتاحیه)<br><strong>اعتبار:</strong> رایگان</div>
+            </div>
+            <div class="card">
+                <div class="card-header"><div class="card-title"><span class="card-icon">⭐</span><span>مزایای پرو</span></div></div>
+                <div class="info-box"><strong>قابلیت‌های فعال:</strong><br>✅ ویرایش قیمت‌ها<br>✅ دسترسی به همه تحلیل‌ها<br>✅ سیگنال‌های هوشمند<br>✅ پشتیبانی اختصاصی</div>
+                <div class="success" style="margin-top:1rem;">✅ اشتراک پرو فعال است (افتتاحیه)</div>
+            </div>
+        </div>`;
+}
 
-
-
-
-
-
-
+// ============================================================
+// CALCULATOR FUNCTIONS
+// ============================================================
 function calculateRaw() {
     const w = parseFloat(document.getElementById('rawWeight').value);
     if (!w || w <= 0) { showNotification('وزن معتبر وارد کنید', 'error'); return; }
     const price = w * app.prices.geram18Market * (740/750);
     document.getElementById('rawResult').innerHTML = `<div class="market-value" style="margin-top:1.5rem;text-align:center;"><div style="font-size:2rem;font-weight:bold;color:var(--accent-gold);">${formatNumber(price)}</div><div style="color:var(--text-secondary);margin-top:0.5rem;">ریال</div></div>`;
 }
-
 function calculateSell() {
     const w = parseFloat(document.getElementById('sellWeight').value);
     const wage = parseFloat(document.getElementById('wage').value);
@@ -1292,6 +1104,197 @@ function calculateSell() {
     document.getElementById('sellResult').innerHTML = `<div class="market-value" style="margin-top:1.5rem;text-align:center;"><div style="font-size:2rem;font-weight:bold;color:var(--accent-gold);">${formatNumber(total)}</div><div style="color:var(--text-secondary);margin-top:0.5rem;">ریال</div><div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-color);font-size:0.9rem;line-height:1.8;text-align:right;">طلای خام: ${formatNumber(gold)}<br>اجرت: ${formatNumber(wage)}<br>سود: ${formatNumber(profVal)}<br>مالیات: ${formatNumber(taxVal)}</div></div>`;
 }
 
+// ============================================================
+// FETCH HISTORY DATA
+// ============================================================
+async function fetchHistory(period = '24h') {
+    try {
+        const res = await fetch(`${HISTORY_API_URL}?period=${period}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('خطا در دریافت تاریخچه');
+        const result = await res.json();
+        
+        if (result.success && result.data && result.data.length > 0) {
+            app.chartData = processHistoryData(result.data);
+            app.chartPeriod = period;
+            return true;
+        }
+        return false;
+    } catch (e) {
+        console.error('خطا در دریافت تاریخچه:', e);
+        return false;
+    }
+}
+
+function processHistoryData(data) {
+    // تبدیل داده‌های خام به فرمت مناسب نمودار
+    const processed = {
+        labels: [],
+        gold: [],
+        silver: [],
+        usd: [],
+        gold18: [],
+        coin: [],
+        mesghal: [],
+        tether: [],
+        bourse: [],
+        brent: [],
+        btc: []
+    };
+    
+    data.forEach(item => {
+        // تبدیل timestamp به تاریخ قابل خواندن
+        const date = new Date(item.timestamp * 1000);
+        const label = app.chartPeriod === '24h' 
+            ? `${date.getHours()}:00`
+            : `${date.getDate()}/${date.getMonth()+1}`;
+        
+        processed.labels.push(label);
+        processed.gold.push(item.gold_ounce || 0);
+        processed.silver.push(item.silver_ounce || 0);
+        processed.usd.push((item.usd_rate || 0) / 10);
+        processed.gold18.push((item.gold18 || 0) / 10);
+        processed.coin.push((item.coin || 0) / 10);
+        processed.mesghal.push((item.mesghal || 0) / 10);
+        processed.tether.push((item.tether || 0) / 10);
+        processed.bourse.push(item.bourse || 0);
+        processed.brent.push(item.brent || 0);
+        processed.btc.push(item.btc || 0);
+    });
+    
+    return processed;
+}
+
+// ============================================================
+// CHARTS
+// ============================================================
+function renderCharts() {
+    const chartMap = {
+        'bourseChart': 'bourse',
+        'goldChart': 'gold',
+        'silverChart': 'silver',
+        'usdChart': 'usd',
+        'gold18Chart': 'gold18',
+        'coinChart': 'coin',
+        'mesghalChart': 'mesghal',
+        'tetherChart': 'tether',
+        'brentChart': 'brent',
+        'btcChart': 'btc'
+    };
+    
+    Object.entries(chartMap).forEach(([canvasId, dataKey]) => {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        if (canvas.__chartInstance) { canvas.__chartInstance.destroy(); }
+        
+        // استفاده از داده‌های واقعی اگه وجود داشته باشه
+        const hasData = app.chartData.labels && app.chartData.labels.length > 0;
+        const labels = hasData ? app.chartData.labels : Array(10).fill('');
+        const data = hasData ? app.chartData[dataKey] : Array(10).fill(0).map(() => Math.random()*100+50);
+        
+        // تشخیص رنگ بر اساس روند
+        const isIncreasing = data.length > 1 && data[data.length-1] > data[0];
+        const borderColor = isIncreasing ? '#10b981' : '#ef4444'; // سبز یا قرمز
+        const bgColor = isIncreasing ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)';
+        
+        const ctx = canvas.getContext('2d');
+        canvas.__chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: { 
+                labels, 
+                datasets: [{ 
+                    data, 
+                    borderColor, 
+                    backgroundColor: bgColor, 
+                    tension: 0.4, 
+                    fill: true, 
+                    pointRadius: 2,
+                    pointBackgroundColor: borderColor,
+                    borderWidth: 2
+                }] 
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        padding: 12,
+                        titleColor: '#fbbf24',
+                        bodyColor: '#fff',
+                        borderColor: '#fbbf24',
+                        borderWidth: 1,
+                        displayColors: false,
+                        callbacks: {
+                            title: function(context) {
+                                return context[0].label;
+                            },
+                            label: function(context) {
+                                const value = context.parsed.y;
+                                return 'قیمت: ' + formatNumber(value);
+                            }
+                        }
+                    }
+                }, 
+                scales: { 
+                    x: { 
+                        display: true,
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: 'var(--text-secondary)',
+                            font: { size: 10 },
+                            maxRotation: 0,
+                            autoSkip: true,
+                            maxTicksLimit: 6
+                        }
+                    }, 
+                    y: { 
+                        display: true,
+                        beginAtZero: false,
+                        grid: {
+                            color: 'rgba(255,255,255,0.05)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: 'var(--text-secondary)',
+                            font: { size: 10 },
+                            callback: function(value) {
+                                return formatNumber(value);
+                            },
+                            maxTicksLimit: 5
+                        },
+                        min: Math.min(...data) * 0.999,
+                        max: Math.max(...data) * 1.001
+                    } 
+                }
+            }
+        });
+    });
+}
+
+async function changePeriod(period) {
+    app.chartPeriod = period;
+    showNotification(`در حال بارگذاری نمودارهای ${period}...`, 'info');
+    const success = await fetchHistory(period);
+    if (success) {
+        renderPage(); // refresh page to update buttons
+        setTimeout(renderCharts, 100);
+        showNotification('✅ نمودارها به‌روزرسانی شد');
+    } else {
+        showNotification('❌ خطا در بارگذاری نمودارها', 'error');
+    }
+}
+
+// ============================================================
+// INIT
+// ============================================================
 function init() {
     document.documentElement.setAttribute('data-theme', app.theme);
     const user = DB.getCurrentUser();
@@ -1301,15 +1304,13 @@ function init() {
         const saved = DB.getPrices();
         if (saved) app.prices = saved;
         initDashboard();
+        // بارگذاری تاریخچه برای نمودارها
         fetchHistory('24h').then(success => {
             if (success && app.currentPage === 'prices') {
                 setTimeout(renderCharts, 100);
             }
         });
-        setInterval(() => { 
-            if (app.currentPage === 'prices' && document.visibilityState === 'visible') 
-                fetchLivePrices(); 
-        }, 10000);
+        setInterval(() => { if (app.currentPage === 'prices' && document.visibilityState === 'visible') fetchLivePrices(); }, 10000);
     } else {
         document.getElementById('welcomeScreen').style.display = 'flex';
         document.getElementById('mainContent').style.display = 'none';
@@ -1318,4 +1319,3 @@ function init() {
 init();
 </script>
 </body>
-</html>
