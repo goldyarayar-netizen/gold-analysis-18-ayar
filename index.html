@@ -303,15 +303,6 @@
             <h1 style="font-size:1.6rem;" id="pageTitle">داشبورد</h1>
         </div>
         <div class="topbar-actions">
-          <!-- 🔔 دکمه اعلان‌ها -->
-<button class="btn btn-outline" 
-        onclick="toggleNotifications()" 
-        id="notificationBtn"
-        title="فعال کردن اعلان‌ها"
-        style="padding:0.7rem 1rem;">
-    <span>🔕</span>
-    <span style="font-size:0.85rem;">غیرفعال</span>
-</button>
             <div class="credit-badge" id="creditBadge"><span>⭐</span><span>افتتاحیه - پرو رایگان!</span></div>
             <div class="theme-toggle" onclick="toggleTheme()"><div class="theme-toggle-slider"></div></div>
             <button class="btn btn-outline" onclick="fetchLivePrices()" title="به‌روزرسانی قیمت‌ها"><span>🔄</span></button>
@@ -386,10 +377,8 @@ let app = {
     },
     priceHistory: [],
     signals: [],           // ✅ اصلاح: آرایه سیگنال‌ها
-    chartPeriod: '24h',
-    chartData: {},
-    notificationsEnabled: localStorage.getItem('notifications_enabled') !== 'false',
-    lastNotificationTime: 0
+    chartPeriod: '24h',    // بازه زمانی پیش‌فرض نمودارها
+    chartData: {}          // داده‌های واقعی نمودارها
 };
 
 // ============================================================
@@ -455,8 +444,7 @@ function initDashboard() {
     document.getElementById('mainContent').style.display = 'block';
     document.getElementById('sidebar').classList.remove('hidden');
     updateUserInfo();
-    updateNotificationButton(); // ✅ این خط را اضافه کنید
-    calculateSignals();
+    calculateSignals();   // ✅ محاسبه سیگنال‌ها هنگام شروع
     renderPage();
 }
 function updateUserInfo() {
@@ -478,251 +466,8 @@ function switchPage(page) {
 }
 
 // ============================================================
-// 🔔 NOTIFICATION SYSTEM (سیستم اعلان‌های مرورگر)
-// ============================================================
-
-const NotificationSystem = {
-    permission: 'default',
-    isEnabled: false,
-    lastNotification: 0,
-    cooldownTime: 60000, // 1 دقیقه بین هر اعلان
-    
-    // درخواست مجوز از کاربر
-    async requestPermission() {
-        if (!('Notification' in window)) {
-            showNotification('❌ مرورگر شما از اعلان پشتیبانی نمی‌کند', 'error');
-            return false;
-        }
-        
-        if (Notification.permission === 'granted') {
-            this.permission = 'granted';
-            this.isEnabled = true;
-            return true;
-        }
-        
-        if (Notification.permission !== 'denied') {
-            const permission = await Notification.requestPermission();
-            this.permission = permission;
-            this.isEnabled = permission === 'granted';
-            
-            if (permission === 'granted') {
-                showNotification('✅ اعلان‌ها فعال شد!', 'success');
-                this.sendTestNotification();
-                return true;
-            } else {
-                showNotification('❌ لطفاً اجازه اعلان را بدهید', 'error');
-                return false;
-            }
-        }
-        
-        showNotification('⚠️ اعلان‌ها مسدود شده‌اند. از تنظیمات مرورگر فعال کنید', 'error');
-        return false;
-    },
-    
-    // ارسال اعلان تست
-    sendTestNotification() {
-        const notification = new Notification('🎉 گلدیار پرو', {
-            body: 'اعلان‌ها با موفقیت فعال شد!\nشما از تمام سیگنال‌های مهم مطلع خواهید شد.',
-            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">💎</text></svg>',
-            badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">💰</text></svg>',
-            tag: 'goldyar-test',
-            requireInteraction: false,
-            silent: false
-        });
-        
-        notification.onclick = () => {
-            window.focus();
-            notification.close();
-        };
-        
-        setTimeout(() => notification.close(), 5000);
-    },
-    
-    // ارسال اعلان سیگنال
-    sendSignalNotification(signal) {
-        const now = Date.now();
-        if (now - this.lastNotification < this.cooldownTime) {
-            console.log('⏱️ اعلان در حالت cooldown است');
-            return;
-        }
-        
-        if (!this.isEnabled || this.permission !== 'granted') {
-            console.log('❌ اعلان‌ها فعال نیست');
-            return;
-        }
-        
-        let emoji = '🎯';
-        let title = 'سیگنال جدید';
-        
-        if (signal.type === 'buy' && signal.priority === 'high') {
-            emoji = '🟢';
-            title = '⚡ فرصت خرید عالی!';
-        } else if (signal.type === 'sell' && signal.priority === 'high') {
-            emoji = '🔴';
-            title = '⚡ هشدار فروش!';
-        } else if (signal.priority === 'high') {
-            emoji = '⚠️';
-            title = '⚡ سیگنال مهم!';
-        }
-        
-        const notification = new Notification(`${emoji} ${title}`, {
-            body: `${signal.title}\n\n${signal.description}`,
-            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">💎</text></svg>',
-            badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="0.9em" font-size="90">' + emoji + '</text></svg>',
-            tag: `goldyar-signal-${signal.type}-${Date.now()}`,
-            requireInteraction: signal.priority === 'high',
-            silent: false,
-            vibrate: signal.priority === 'high' ? [200, 100, 200] : [100],
-            data: signal
-        });
-        
-        notification.onclick = () => {
-            window.focus();
-            if (app.currentPage !== 'signals') {
-                switchPage('signals');
-            }
-            notification.close();
-        };
-        
-        if (signal.priority !== 'high') {
-            setTimeout(() => notification.close(), 8000);
-        }
-        
-        this.lastNotification = now;
-        this.playSound(signal.priority);
-    },
-    
-    // پخش صدای اعلان
-    playSound(priority = 'medium') {
-        try {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            if (priority === 'high') {
-                oscillator.frequency.value = 800;
-                gainNode.gain.value = 0.3;
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.1);
-                
-                setTimeout(() => {
-                    const osc2 = audioContext.createOscillator();
-                    const gain2 = audioContext.createGain();
-                    osc2.connect(gain2);
-                    gain2.connect(audioContext.destination);
-                    osc2.frequency.value = 800;
-                    gain2.gain.value = 0.3;
-                    osc2.start();
-                    osc2.stop(audioContext.currentTime + 0.1);
-                }, 150);
-                
-                setTimeout(() => {
-                    const osc3 = audioContext.createOscillator();
-                    const gain3 = audioContext.createGain();
-                    osc3.connect(gain3);
-                    gain3.connect(audioContext.destination);
-                    osc3.frequency.value = 800;
-                    gain3.gain.value = 0.3;
-                    osc3.start();
-                    osc3.stop(audioContext.currentTime + 0.1);
-                }, 300);
-            } else {
-                oscillator.frequency.value = 600;
-                gainNode.gain.value = 0.2;
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.15);
-            }
-        } catch (e) {
-            console.error('خطا در پخش صدا:', e);
-        }
-    },
-    
-    // بررسی سیگنال‌های جدید و ارسال اعلان
-    checkAndNotify() {
-        if (!this.isEnabled) return;
-        
-        const highPrioritySignals = app.signals.filter(s => s.priority === 'high');
-        
-        if (highPrioritySignals.length > 0) {
-            this.sendSignalNotification(highPrioritySignals[0]);
-        }
-    },
-    
-    // غیرفعال کردن اعلان‌ها
-    disable() {
-        this.isEnabled = false;
-        localStorage.setItem('goldyar_notifications_enabled', 'false');
-        showNotification('🔕 اعلان‌ها غیرفعال شد', 'info');
-    },
-    
-    // فعال کردن اعلان‌ها
-    async enable() {
-        const granted = await this.requestPermission();
-        if (granted) {
-            this.isEnabled = true;
-            localStorage.setItem('goldyar_notifications_enabled', 'true');
-        }
-    },
-    
-    // بارگذاری تنظیمات
-    loadSettings() {
-        const saved = localStorage.getItem('goldyar_notifications_enabled');
-        if (saved === 'true' && Notification.permission === 'granted') {
-            this.isEnabled = true;
-            this.permission = 'granted';
-        }
-    }
-};
-
-// ============================================================
-// 🔔 NOTIFICATION CONTROLS (کنترل‌های اعلان)
-// ============================================================
-
-async function toggleNotifications() {
-    if (NotificationSystem.isEnabled) {
-        NotificationSystem.disable();
-    } else {
-        await NotificationSystem.enable();
-    }
-    
-    updateNotificationButton();
-    renderPage(); // برای آپدیت صفحه تنظیمات
-}
-
-function updateNotificationButton() {
-    const btn = document.getElementById('notificationBtn');
-    if (btn) {
-        btn.className = `btn ${NotificationSystem.isEnabled ? 'btn-success' : 'btn-outline'}`;
-        btn.title = NotificationSystem.isEnabled ? 'غیرفعال کردن اعلان‌ها' : 'فعال کردن اعلان‌ها';
-        btn.innerHTML = `
-            <span>${NotificationSystem.isEnabled ? '🔔' : '🔕'}</span>
-            <span style="font-size:0.85rem;">${NotificationSystem.isEnabled ? 'فعال' : 'غیرفعال'}</span>
-        `;
-    }
-}
-
-function testNotification() {
-    if (!NotificationSystem.isEnabled) {
-        showNotification('⚠️ ابتدا اعلان‌ها را فعال کنید', 'error');
-        return;
-    }
-    
-    const testSignal = {
-        type: 'buy',
-        priority: 'high',
-        title: '🟢 تست: فرصت خرید عالی!',
-        description: 'این یک اعلان تستی است.\nاگر این پیام را می‌بینید، اعلان‌ها درست کار می‌کنند! ✅'
-    };
-    
-    NotificationSystem.sendSignalNotification(testSignal);
-}
-
-// ============================================================
 // FETCH LIVE PRICES
-// =========================================================
+// ============================================================
 async function fetchLivePrices() {
     showNotification('در حال دریافت قیمت‌های جدید...', 'info');
     try {
@@ -762,13 +507,8 @@ async function fetchLivePrices() {
             const te = document.getElementById('lastUpdateTime');
             if (te) te.innerHTML = `📡 آخرین به‌روزرسانی: <strong style="color:var(--accent-gold);">${dateStr}</strong> ساعت <strong style="color:var(--accent-gold);">${timeStr}</strong>`;
 
-            
-            
-
-// داخل if (updated) { ... }
-calculateSignals();
-NotificationSystem.checkAndNotify(); 
-showNotification('✅ قیمت‌ها به‌روزرسانی شد');
+            calculateSignals();   // ✅ محاسبه سیگنال‌ها بعد از update
+            showNotification('✅ قیمت‌ها به‌روزرسانی شد');
             if (app.currentPage === 'prices') setTimeout(renderCharts, 100);
             if (app.currentPage === 'signals') renderPage();   // ✅ refresh signals page
         } else { showNotification('⚠️ داده جدیدی دریافت نشد', 'error'); }
@@ -910,14 +650,11 @@ function calculateSignals() {
     } else if (c.uaeGoldDiff < -3500000) {
         app.signals.push({ type:'sell', priority:'medium', title:'🔴 فروش طلا به امارات', description:`اختلاف: ${formatNumber(Math.abs(c.uaeGoldDiff)/10)} تومان` });
     }
+
     // Sort: high first
     const order = { high:0, medium:1, low:2 };
     app.signals.sort((a, b) => (order[a.priority] || 2) - (order[b.priority] || 2));
-    
-    // 🔔 بررسی و ارسال اعلان
-    NotificationSystem.checkAndNotify();
 }
-
 
 // ============================================================
 // RENDER PAGE ROUTER
@@ -1247,43 +984,94 @@ function renderSettingsPage() {
     return `
         <div class="cards-grid">
             <div class="card">
+                <div class="card-header"><div class="card-title"><span class="card-icon">🔔</span><span>تنظیمات اعلان</span></div></div>
+                <div class="info-box">
+                    <strong>وضعیت اعلان‌های مرورگر:</strong><br>
+                    ${Notification.permission === 'granted' ? '✅ فعال' : 
+                      Notification.permission === 'denied' ? '❌ رد شده' : 
+                      '⚠️ غیرفعال'}
+                </div>
+                ${Notification.permission === 'default' ? 
+                    '<button class="btn btn-primary" onclick="enableNotifications()" style="width:100%;margin-top:1rem;">🔔 فعال‌سازی اعلان‌ها</button>' : 
+                    Notification.permission === 'denied' ?
+                    '<div class="error" style="margin-top:1rem;">برای فعال‌سازی، از تنظیمات مرورگر اجازه دهید</div>' :
+                    `<div style="margin-top:1rem;">
+                        <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;">
+                            <input type="checkbox" ${app.notificationsEnabled ? 'checked' : ''} onchange="toggleNotifications(this.checked)" style="width:auto;">
+                            <span>دریافت اعلان برای سیگنال‌های مهم</span>
+                        </label>
+                    </div>`
+                }
+                <div class="interpretation" style="margin-top:1rem;">
+                    <div class="interpretation-title">💡 نکته:</div>
+                    با فعال‌سازی اعلان‌ها، وقتی سیگنال مهمی شناسایی شد - حتی اگه سایت بسته باشه - به شما اطلاع داده میشه!
+                </div>
+                ${Notification.permission === 'granted' ? 
+                    `<button class="btn btn-warning" onclick="testNotification()" style="width:100%;margin-top:1rem;">🧪 تست اعلان</button>
+                    <div style="margin-top:1rem;">
+                        <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;">
+                            <input type="checkbox" ${app.soundEnabled ? 'checked' : ''} onchange="toggleSound(this.checked)" style="width:auto;">
+                            <span>🔊 پخش صدا هنگام دریافت اعلان</span>
+                        </label>
+                    </div>` : 
+                    ''}
+            </div>
+            <div class="card">
+                <div class="card-header"><div class="card-title"><span class="card-icon">⚙️</span><span>هشدارهای سفارشی</span></div></div>
+                <div class="info-box" style="margin-bottom:1rem;">
+                    تنظیم کنید که برای چه شرایطی به شما اعلان داده شود.
+                </div>
+                
+                <form onsubmit="event.preventDefault(); saveNewAlert();" style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <select id="alertPriceType" style="width:100%;">
+                        <option value="goldPrice">انس طلا (دلار)</option>
+                        <option value="silverPrice">انس نقره (دلار)</option>
+                        <option value="usdRate">دلار (ریال)</option>
+                        <option value="coinPrice">سکه (ریال)</option>
+                        <option value="geram18Market">طلای 18 (ریال)</option>
+                        <option value="mesghalMarket">مثقال (ریال)</option>
+                        <option value="tether">تتر (ریال)</option>
+                        <option value="btc">بیت‌کوین (دلار)</option>
+                    </select>
+                    
+                    <select id="alertCondition" style="width:100%;">
+                        <option value="above">بالاتر از</option>
+                        <option value="below">پایین‌تر از</option>
+                    </select>
+                    
+                    <input type="number" id="alertThreshold" placeholder="مقدار آستانه" step="0.01" required style="width:100%;">
+                    
+                    <button type="submit" class="btn btn-primary" style="width:100%;">➕ افزودن هشدار</button>
+                </form>
+                
+                <div style="margin-top:1.5rem;">
+                    <h4 style="margin-bottom:0.75rem;color:var(--text-secondary);font-size:0.9rem;">هشدارهای فعال:</h4>
+                    ${app.customAlerts.length === 0 ? 
+                        '<div style="text-align:center;color:var(--text-secondary);padding:1rem;">هیچ هشداری تنظیم نشده</div>' :
+                        app.customAlerts.map(alert => `
+                            <div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem;background:var(--bg-primary);border-radius:0.5rem;margin-bottom:0.5rem;border:1px solid var(--border-color);">
+                                <div style="font-size:0.85rem;">
+                                    <strong>${alert.priceLabel}</strong> ${alert.condition === 'above' ? 'بالاتر از' : 'پایین‌تر از'} 
+                                    <strong style="color:var(--accent-gold);">${formatNumber(alert.threshold)}</strong> ${alert.unit}
+                                </div>
+                                <button onclick="removeCustomAlert(${alert.id})" class="btn btn-danger" style="padding:0.3rem 0.6rem;font-size:0.8rem;">🗑️</button>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+            </div>
+            <div class="card">
                 <div class="card-header"><div class="card-title"><span class="card-icon">👤</span><span>اطلاعات حساب</span></div></div>
                 <div class="info-box"><strong>ایمیل:</strong> ${app.user?.email || 'مهمان'}<br><strong>وضعیت:</strong> ⭐ پرو فعال (افتتاحیه)<br><strong>اعتبار:</strong> رایگان</div>
             </div>
-            
-            <!-- 🔔 کارت اعلان‌ها -->
-            <div class="card">
-                <div class="card-header"><div class="card-title"><span class="card-icon">🔔</span><span>مدیریت اعلان‌ها</span></div></div>
-                <div class="info-box">
-                    <strong>وضعیت:</strong> ${NotificationSystem.isEnabled ? '✅ فعال' : '❌ غیرفعال'}<br>
-                    <strong>مجوز مرورگر:</strong> ${NotificationSystem.permission === 'granted' ? '✅ داده شده' : NotificationSystem.permission === 'denied' ? '❌ رد شده' : '⏳ درخواست نشده'}
-                </div>
-                <button class="btn ${NotificationSystem.isEnabled ? 'btn-danger' : 'btn-success'}" 
-                        onclick="toggleNotifications()" 
-                        style="width:100%;margin-top:1rem;">
-                    <span>${NotificationSystem.isEnabled ? '🔕' : '🔔'}</span>
-                    <span>${NotificationSystem.isEnabled ? 'غیرفعال کردن' : 'فعال کردن'}</span>
-                </button>
-                <button class="btn btn-outline" onclick="testNotification()" style="width:100%;margin-top:0.5rem;">
-                    <span>🧪</span><span>تست اعلان</span>
-                </button>
-                ${NotificationSystem.permission === 'denied' ? `
-                    <div class="error" style="margin-top:1rem;font-size:0.85rem;">
-                        ⚠️ اعلان‌ها مسدود شده‌اند.<br>
-                        از تنظیمات مرورگر آن را فعال کنید.
-                    </div>
-                ` : ''}
-            </div>
-            
             <div class="card">
                 <div class="card-header"><div class="card-title"><span class="card-icon">⭐</span><span>مزایای پرو</span></div></div>
-                <div class="info-box"><strong>قابلیت‌های فعال:</strong><br>✅ ویرایش قیمت‌ها<br>✅ دسترسی به همه تحلیل‌ها<br>✅ سیگنال‌های هوشمند<br>✅ اعلان‌های لحظه‌ای<br>✅ پشتیبانی اختصاصی</div>
+                <div class="info-box"><strong>قابلیت‌های فعال:</strong><br>✅ ویرایش قیمت‌ها<br>✅ دسترسی به همه تحلیل‌ها<br>✅ سیگنال‌های هوشمند<br>✅ پشتیبانی اختصاصی</div>
                 <div class="success" style="margin-top:1rem;">✅ اشتراک پرو فعال است (افتتاحیه)</div>
             </div>
         </div>`;
-}   
-          
-            
+}
+
 // ============================================================
 // CALCULATOR FUNCTIONS
 // ============================================================
@@ -1395,7 +1183,7 @@ function renderCharts() {
         
         // تشخیص رنگ بر اساس روند
         const isIncreasing = data.length > 1 && data[data.length-1] > data[0];
-        const borderColor = isIncreasing ? '#10b981' : '#ef4444';
+        const borderColor = isIncreasing ? '#10b981' : '#ef4444'; // سبز یا قرمز
         const bgColor = isIncreasing ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)';
         
         const ctx = canvas.getContext('2d');
@@ -1409,77 +1197,23 @@ function renderCharts() {
                     backgroundColor: bgColor, 
                     tension: 0.4, 
                     fill: true, 
-                    pointRadius: 2,
-                    pointBackgroundColor: borderColor,
-                    borderWidth: 2 
+                    pointRadius: 0,
+                    borderWidth: 2
                 }] 
             },
             options: { 
                 responsive: true, 
                 maintainAspectRatio: false, 
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                },
-                plugins: { 
-                    legend: { display: false },
-                    tooltip: {
-                        enabled: true,
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        padding: 12,
-                        titleColor: '#fbbf24',
-                        bodyColor: '#fff',
-                        borderColor: '#fbbf24',
-                        borderWidth: 1,
-                        displayColors: false,
-                        callbacks: {
-                            title: function(context) {
-                                return context[0].label;
-                            },
-                            label: function(context) {
-                                const value = context.parsed.y;
-                                return 'قیمت: ' + formatNumber(value);
-                            }
-                        }
-                    }
-                }, 
+                plugins: { legend: { display: false } }, 
                 scales: { 
-                    x: { 
-                        display: true,
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: 'var(--text-secondary)',
-                            font: { size: 10 },
-                            maxRotation: 0,
-                            autoSkip: true,
-                            maxTicksLimit: 6
-                        }
-                    }, 
-                    y: { 
-                        display: true,
-                        beginAtZero: false,
-                        grid: {
-                            color: 'rgba(255,255,255,0.05)',
-                            drawBorder: false
-                        },
-                        ticks: {
-                            color: 'var(--text-secondary)',
-                            font: { size: 10 },
-                            callback: function(value) {
-                                return formatNumber(value);
-                            },
-                            maxTicksLimit: 5
-                        },
-                        min: Math.min(...data) * 0.999,
-                        max: Math.max(...data) * 1.001
-                    } 
+                    x: { display: false }, 
+                    y: { display: false } 
                 }
             }
         });
     });
 }
+
 async function changePeriod(period) {
     app.chartPeriod = period;
     showNotification(`در حال بارگذاری نمودارهای ${period}...`, 'info');
@@ -1493,71 +1227,11 @@ async function changePeriod(period) {
     }
 }
 
-async function enableNotifications() {
-    const granted = await requestNotificationPermission();
-    if (granted) {
-        app.notificationsEnabled = true;
-        localStorage.setItem('notifications_enabled', 'true');
-        showNotification('✅ اعلان‌ها فعال شد!');
-        
-        // تست اعلان
-        sendBrowserNotification(
-            'اعلان‌ها فعال شد! 🎉',
-            'از این به بعد سیگنال‌های مهم به شما اطلاع داده می‌شود.',
-            'medium'
-        );
-        
-        renderPage();
-    } else {
-        showNotification('❌ اجازه اعلان داده نشد', 'error');
-    }
-}
-
-function checkAndNotifySignals() {
-    try {
-        if (!app.notificationsEnabled) return;
-        if (!window.Notification) return;
-        if (Notification.permission !== 'granted') return;
-        if (!app.signals || app.signals.length === 0) return;
-        
-        // فقط سیگنال‌های high رو اعلان میده
-        const highPrioritySignals = app.signals.filter(s => s.priority === 'high');
-        
-        if (highPrioritySignals.length > 0) {
-            const buySignals = highPrioritySignals.filter(s => s.type === 'buy').length;
-            const sellSignals = highPrioritySignals.filter(s => s.type === 'sell').length;
-            
-            if (buySignals > 0) {
-                sendBrowserNotification(
-                    `${buySignals} سیگنال خرید قوی!`,
-                    'سیگنال‌های با اولویت بالا شناسایی شد. برای مشاهده کلیک کنید.',
-                    'high'
-                );
-            }
-            
-            if (sellSignals > 0) {
-                sendBrowserNotification(
-                    `${sellSignals} سیگنال فروش مهم!`,
-                    'توجه: سیگنال فروش با اولویت بالا فعال شد.',
-                    'high'
-                );
-            }
-        }
-    } catch (error) {
-        console.error('خطا در checkAndNotifySignals:', error);
-    }
-}
-
-
 // ============================================================
 // INIT
 // ============================================================
 function init() {
     document.documentElement.setAttribute('data-theme', app.theme);
-    
-    // 🔔 بارگذاری تنظیمات اعلان
-    NotificationSystem.loadSettings();
-
     const user = DB.getCurrentUser();
     if (user) {
         app.user = user;
@@ -1565,18 +1239,13 @@ function init() {
         const saved = DB.getPrices();
         if (saved) app.prices = saved;
         initDashboard();
-        
         // بارگذاری تاریخچه برای نمودارها
         fetchHistory('24h').then(success => {
             if (success && app.currentPage === 'prices') {
                 setTimeout(renderCharts, 100);
             }
         });
-        
-        setInterval(() => { 
-            if (app.currentPage === 'prices' && document.visibilityState === 'visible') 
-                fetchLivePrices(); 
-        }, 10000);
+        setInterval(() => { if (app.currentPage === 'prices' && document.visibilityState === 'visible') fetchLivePrices(); }, 10000);
     } else {
         document.getElementById('welcomeScreen').style.display = 'flex';
         document.getElementById('mainContent').style.display = 'none';
