@@ -1105,12 +1105,267 @@ function calculateSell() {
 }
 
 // ============================================================
+// BROWSER NOTIFICATIONS & SOUND
+// ============================================================
+async function requestNotificationPermission() {
+    if (!('Notification' in window)) {
+        console.log('این مرورگر از اعلان پشتیبانی نمی‌کنه');
+        return false;
+    }
+    
+    if (Notification.permission === 'granted') {
+        return true;
+    }
+    
+    if (Notification.permission !== 'denied') {
+        const permission = await Notification.requestPermission();
+        return permission === 'granted';
+    }
+    
+    return false;
+}
+
+function sendBrowserNotification(title, message, priority = 'medium') {
+    try {
+        const now = Date.now();
+        if (now - app.lastNotificationTime < 30000) return;
+        app.lastNotificationTime = now;
+        
+        if (!app.notificationsEnabled) return;
+        if (!window.Notification || Notification.permission !== 'granted') return;
+        
+        const icon = priority === 'high' ? '🔴' : priority === 'medium' ? '🟡' : '🔵';
+        
+        const notification = new Notification(`${icon} ${title}`, {
+            body: message,
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="75" font-size="75">💎</text></svg>',
+            tag: 'goldyar-signal',
+            requireInteraction: priority === 'high'
+        });
+        
+        notification.onclick = function() {
+            window.focus();
+            switchPage('signals');
+            notification.close();
+        };
+        
+        playNotificationSound(priority);
+    } catch (error) {
+        console.error('خطا در sendBrowserNotification:', error);
+    }
+}
+
+function checkAndNotifySignals() {
+    try {
+        if (!app.notificationsEnabled) return;
+        if (!window.Notification || Notification.permission !== 'granted') return;
+        if (!app.signals || app.signals.length === 0) return;
+        
+        const highPrioritySignals = app.signals.filter(s => s.priority === 'high');
+        
+        if (highPrioritySignals.length > 0) {
+            const buySignals = highPrioritySignals.filter(s => s.type === 'buy').length;
+            const sellSignals = highPrioritySignals.filter(s => s.type === 'sell').length;
+            
+            if (buySignals > 0) {
+                sendBrowserNotification(
+                    `${buySignals} سیگنال خرید قوی!`,
+                    'سیگنال‌های با اولویت بالا شناسایی شد.',
+                    'high'
+                );
+            }
+            
+            if (sellSignals > 0) {
+                sendBrowserNotification(
+                    `${sellSignals} سیگنال فروش مهم!`,
+                    'توجه: سیگنال فروش با اولویت بالا فعال شد.',
+                    'high'
+                );
+            }
+        }
+    } catch (error) {
+        console.error('خطا در checkAndNotifySignals:', error);
+    }
+}
+
+function playNotificationSound(priority = 'medium') {
+    if (!app.soundEnabled) return;
+    
+    try {
+        const frequencies = {
+            high: [800, 1000, 1200],
+            medium: [600, 800],
+            low: [400, 600]
+        };
+        
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const freq = frequencies[priority] || frequencies.medium;
+        
+        freq.forEach((f, i) => {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = f;
+            oscillator.type = 'sine';
+            
+            const startTime = audioContext.currentTime + (i * 0.15);
+            const endTime = startTime + 0.1;
+            
+            gainNode.gain.setValueAtTime(0.3, startTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, endTime);
+            
+            oscillator.start(startTime);
+            oscillator.stop(endTime);
+        });
+    } catch (error) {
+        console.error('خطا در پخش صدا:', error);
+    }
+}
+
+function toggleSound(enabled) {
+    app.soundEnabled = enabled;
+    localStorage.setItem('sound_enabled', enabled ? 'true' : 'false');
+    
+    if (enabled) {
+        playNotificationSound('medium');
+        showNotification('🔊 صدای اعلان فعال شد');
+    } else {
+        showNotification('🔇 صدای اعلان غیرفعال شد');
+    }
+}
+
+function checkCustomAlerts() {
+    if (!app.customAlerts || app.customAlerts.length === 0) return;
+    
+    app.customAlerts.forEach(alert => {
+        if (!alert.active) return;
+        
+        const currentValue = app.prices[alert.priceType];
+        if (!currentValue) return;
+        
+        let triggered = false;
+        let message = '';
+        
+        if (alert.condition === 'above' && currentValue > alert.threshold) {
+            triggered = true;
+            message = `${alert.priceLabel} از ${formatNumber(alert.threshold)} ${alert.unit} عبور کرد!`;
+        } else if (alert.condition === 'below' && currentValue < alert.threshold) {
+            triggered = true;
+            message = `${alert.priceLabel} از ${formatNumber(alert.threshold)} ${alert.unit} پایین‌تر رفت!`;
+        }
+        
+        if (triggered) {
+            sendBrowserNotification(`🔔 هشدار: ${alert.priceLabel}`, message, 'high');
+            alert.active = false;
+            setTimeout(() => {
+                alert.active = true;
+                saveCustomAlerts();
+            }, 300000);
+        }
+    });
+}
+
+function addCustomAlert(priceType, priceLabel, condition, threshold, unit) {
+    const alert = {
+        id: Date.now(),
+        priceType,
+        priceLabel,
+        condition,
+        threshold: parseFloat(threshold),
+        unit,
+        active: true
+    };
+    
+    app.customAlerts.push(alert);
+    saveCustomAlerts();
+    showNotification(`✅ هشدار برای ${priceLabel} اضافه شد`);
+    renderPage();
+}
+
+function removeCustomAlert(id) {
+    app.customAlerts = app.customAlerts.filter(a => a.id !== id);
+    saveCustomAlerts();
+    showNotification('🗑️ هشدار حذف شد');
+    renderPage();
+}
+
+function saveCustomAlerts() {
+    localStorage.setItem('custom_alerts', JSON.stringify(app.customAlerts));
+}
+
+async function enableNotifications() {
+    const granted = await requestNotificationPermission();
+    if (granted) {
+        app.notificationsEnabled = true;
+        localStorage.setItem('notifications_enabled', 'true');
+        showNotification('✅ اعلان‌ها فعال شد!');
+        
+        sendBrowserNotification(
+            'اعلان‌ها فعال شد! 🎉',
+            'از این به بعد سیگنال‌های مهم به شما اطلاع داده می‌شود.',
+            'medium'
+        );
+        
+        renderPage();
+    } else {
+        showNotification('❌ اجازه اعلان داده نشد', 'error');
+    }
+}
+
+function toggleNotifications(enabled) {
+    app.notificationsEnabled = enabled;
+    localStorage.setItem('notifications_enabled', enabled ? 'true' : 'false');
+    showNotification(enabled ? '✅ اعلان‌ها فعال شد' : '🔕 اعلان‌ها غیرفعال شد');
+}
+
+function testNotification() {
+    sendBrowserNotification(
+        'تست اعلان! 🎉',
+        'اگه این رو می‌بینید، اعلان‌ها درست کار می‌کنن!',
+        'high'
+    );
+    checkAndNotifySignals();
+    showNotification('✅ اعلان تست ارسال شد');
+}
+
+function saveNewAlert() {
+    const priceTypeSelect = document.getElementById('alertPriceType');
+    const priceType = priceTypeSelect.value;
+    const priceLabel = priceTypeSelect.options[priceTypeSelect.selectedIndex].text.split('(')[0].trim();
+    const condition = document.getElementById('alertCondition').value;
+    const threshold = document.getElementById('alertThreshold').value;
+    
+    if (!threshold || parseFloat(threshold) <= 0) {
+        showNotification('❌ مقدار آستانه معتبر نیست', 'error');
+        return;
+    }
+    
+    const unitMap = {
+        goldPrice: 'دلار', silverPrice: 'دلار', usdRate: 'ریال',
+        coinPrice: 'ریال', geram18Market: 'ریال', mesghalMarket: 'ریال',
+        tether: 'ریال', btc: 'دلار'
+    };
+    
+    addCustomAlert(priceType, priceLabel, condition, threshold, unitMap[priceType] || 'واحد');
+    document.getElementById('alertThreshold').value = '';
+}
+
+// ============================================================
 // FETCH HISTORY DATA
 // ============================================================
 async function fetchHistory(period = '24h') {
     try {
-        const res = await fetch(`${HISTORY_API_URL}?period=${period}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error('خطا در دریافت تاریخچه');
+        const res = await fetch(`${HISTORY_API_URL}?period=${period}`, { 
+            cache: 'no-store',
+            mode: 'cors'
+        });
+        if (!res.ok) {
+            console.warn('تاریخچه در دسترس نیست، از داده‌های فیک استفاده می‌شود');
+            return false;
+        }
         const result = await res.json();
         
         if (result.success && result.data && result.data.length > 0) {
@@ -1120,7 +1375,7 @@ async function fetchHistory(period = '24h') {
         }
         return false;
     } catch (e) {
-        console.error('خطا در دریافت تاریخچه:', e);
+        console.warn('خطا در دریافت تاریخچه - نمودارها با داده فیک کار می‌کنند:', e.message);
         return false;
     }
 }
