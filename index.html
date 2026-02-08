@@ -511,7 +511,9 @@ async function fetchLivePrices() {
             const te = document.getElementById('lastUpdateTime');
             if (te) te.innerHTML = `📡 آخرین به‌روزرسانی: <strong style="color:var(--accent-gold);">${dateStr}</strong> ساعت <strong style="color:var(--accent-gold);">${timeStr}</strong>`;
 
-            calculateSignals();   // ✅ محاسبه سیگنال‌ها بعد از update
+            calculateSignals();
+            checkAndNotifySignals();
+            checkCustomAlerts();
             showNotification('✅ قیمت‌ها به‌روزرسانی شد');
             if (app.currentPage === 'prices') setTimeout(renderCharts, 100);
             if (app.currentPage === 'signals') renderPage();   // ✅ refresh signals page
@@ -1018,6 +1020,7 @@ function renderSettingsPage() {
                 </div>
                 ${notificationSupported && notificationPermission === 'granted' ? 
                     `<button class="btn btn-warning" onclick="testNotification()" style="width:100%;margin-top:1rem;">🧪 تست اعلان</button>
+                    <button class="btn btn-primary" onclick="testSound()" style="width:100%;margin-top:0.5rem;">🔊 تست صدا</button>
                     <div style="margin-top:1rem;">
                         <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;">
                             <input type="checkbox" ${app.soundEnabled ? 'checked' : ''} onchange="toggleSound(this.checked)" style="width:auto;">
@@ -1243,18 +1246,24 @@ function checkCustomAlerts() {
     app.customAlerts.forEach(alert => {
         if (!alert.active) return;
         
-        const currentValue = app.prices[alert.priceType];
+        let currentValue = app.prices[alert.priceType];
         if (!currentValue) return;
+        
+        // قیمت‌هایی که باید تقسیم بر 10 بشن (تومان)
+        const divideBy10 = ['usdRate', 'mesghalMarket', 'geram18Market', 'coinPrice', 'tether', 'dirhamRate'];
+        if (divideBy10.includes(alert.priceType)) {
+            currentValue = currentValue / 10; // تبدیل ریال به تومان
+        }
         
         let triggered = false;
         let message = '';
         
         if (alert.condition === 'above' && currentValue > alert.threshold) {
             triggered = true;
-            message = `${alert.priceLabel} از ${formatNumber(alert.threshold)} ${alert.unit} عبور کرد!`;
+            message = `${alert.priceLabel} از ${formatNumber(alert.threshold)} ${alert.unit} عبور کرد! (فعلی: ${formatNumber(currentValue)})`;
         } else if (alert.condition === 'below' && currentValue < alert.threshold) {
             triggered = true;
-            message = `${alert.priceLabel} از ${formatNumber(alert.threshold)} ${alert.unit} پایین‌تر رفت!`;
+            message = `${alert.priceLabel} از ${formatNumber(alert.threshold)} ${alert.unit} پایین‌تر رفت! (فعلی: ${formatNumber(currentValue)})`;
         }
         
         if (triggered) {
@@ -1331,6 +1340,11 @@ function testNotification() {
     showNotification('✅ اعلان تست ارسال شد');
 }
 
+function testSound() {
+    playNotificationSound('high');
+    showNotification('🔊 صدا پخش شد');
+}
+
 function saveNewAlert() {
     const priceTypeSelect = document.getElementById('alertPriceType');
     const priceType = priceTypeSelect.value;
@@ -1344,9 +1358,17 @@ function saveNewAlert() {
     }
     
     const unitMap = {
-        goldPrice: 'دلار', silverPrice: 'دلار', usdRate: 'ریال',
-        coinPrice: 'ریال', geram18Market: 'ریال', mesghalMarket: 'ریال',
-        tether: 'ریال', btc: 'دلار'
+        goldPrice: 'دلار', 
+        silverPrice: 'دلار', 
+        usdRate: 'تومان',
+        coinPrice: 'تومان', 
+        geram18Market: 'تومان', 
+        mesghalMarket: 'تومان',
+        tether: 'تومان', 
+        btc: 'دلار',
+        dirhamRate: 'تومان',
+        bourse: 'واحد',
+        brent: 'دلار'
     };
     
     addCustomAlert(priceType, priceLabel, condition, threshold, unitMap[priceType] || 'واحد');
