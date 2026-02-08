@@ -1021,6 +1021,7 @@ function renderSettingsPage() {
                 ${notificationSupported && notificationPermission === 'granted' ? 
                     `<button class="btn btn-warning" onclick="testNotification()" style="width:100%;margin-top:1rem;">🧪 تست اعلان</button>
                     <button class="btn btn-primary" onclick="testSound()" style="width:100%;margin-top:0.5rem;">🔊 تست صدا</button>
+                    <button class="btn btn-success" onclick="testSignalNotification()" style="width:100%;margin-top:0.5rem;">🎯 تست اعلان سیگنال</button>
                     <div style="margin-top:1rem;">
                         <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;">
                             <input type="checkbox" ${app.soundEnabled ? 'checked' : ''} onchange="toggleSound(this.checked)" style="width:auto;">
@@ -1160,15 +1161,32 @@ function sendBrowserNotification(title, message, priority = 'medium') {
 
 function checkAndNotifySignals() {
     try {
-        if (!app.notificationsEnabled) return;
-        if (!window.Notification || Notification.permission !== 'granted') return;
-        if (!app.signals || app.signals.length === 0) return;
+        console.log('🔔 checkAndNotifySignals فراخوانی شد');
+        console.log('notificationsEnabled:', app.notificationsEnabled);
+        console.log('Notification.permission:', window.Notification ? Notification.permission : 'N/A');
+        console.log('app.signals:', app.signals);
+        
+        if (!app.notificationsEnabled) {
+            console.log('❌ اعلان‌ها غیرفعال است');
+            return;
+        }
+        if (!window.Notification || Notification.permission !== 'granted') {
+            console.log('❌ مجوز اعلان نیست');
+            return;
+        }
+        if (!app.signals || app.signals.length === 0) {
+            console.log('❌ سیگنالی وجود نداره');
+            return;
+        }
         
         const highPrioritySignals = app.signals.filter(s => s.priority === 'high');
+        console.log('🔴 سیگنال‌های high:', highPrioritySignals.length);
         
         if (highPrioritySignals.length > 0) {
             const buySignals = highPrioritySignals.filter(s => s.type === 'buy').length;
             const sellSignals = highPrioritySignals.filter(s => s.type === 'sell').length;
+            
+            console.log(`✅ ${buySignals} خرید، ${sellSignals} فروش - ارسال اعلان...`);
             
             if (buySignals > 0) {
                 sendBrowserNotification(
@@ -1185,6 +1203,8 @@ function checkAndNotifySignals() {
                     'high'
                 );
             }
+        } else {
+            console.log('ℹ️ سیگنال high نیست');
         }
     } catch (error) {
         console.error('خطا در checkAndNotifySignals:', error);
@@ -1343,6 +1363,16 @@ function testNotification() {
 function testSound() {
     playNotificationSound('high');
     showNotification('🔊 صدا پخش شد');
+}
+
+function testSignalNotification() {
+    console.log('🧪 تست اعلان سیگنال شروع شد');
+    console.log('سیگنال‌های فعلی:', app.signals);
+    
+    // فراخوانی مستقیم checkAndNotifySignals
+    checkAndNotifySignals();
+    
+    showNotification('✅ تست سیگنال انجام شد - Console رو چک کنید');
 }
 
 function saveNewAlert() {
