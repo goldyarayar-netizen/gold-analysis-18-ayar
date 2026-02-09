@@ -290,6 +290,7 @@
     <div class="nav-item active" onclick="switchPage('prices')" data-page="prices"><span class="nav-icon">💰</span><span>قیمت‌های زنده</span></div>
     <div class="nav-item" onclick="switchPage('analysis')" data-page="analysis"><span class="nav-icon">📊</span><span>تحلیل‌ها</span></div>
     <div class="nav-item" onclick="switchPage('signals')" data-page="signals"><span class="nav-icon">🎯</span><span>سیگنال‌های پیشنهادی</span></div>
+    <div class="nav-item" onclick="switchPage('notifications')" data-page="notifications"><span class="nav-icon">🔔</span><span>اعلان‌ها</span></div>
     <div class="nav-item" onclick="switchPage('calculator')" data-page="calculator"><span class="nav-icon">🧮</span><span>ماشین حساب</span></div>
     <div class="nav-item" onclick="switchPage('settings')" data-page="settings"><span class="nav-icon">⚙️</span><span>تنظیمات</span></div>
     <div style="margin-top:2rem;"><button class="btn btn-danger" onclick="logout()" style="width:100%;"><span>🚪</span><span>خروج</span></button></div>
@@ -463,7 +464,7 @@ function updateUserInfo() {
 function switchPage(page) {
     app.currentPage = page;
     document.querySelectorAll('.nav-item').forEach(i => { i.classList.remove('active'); if (i.dataset.page === page) i.classList.add('active'); });
-    const titles = { prices:'قیمت‌های زنده', analysis:'تحلیل‌های حرفه‌ای', signals:'سیگنال‌های پیشنهادی', calculator:'ماشین حساب طلا', settings:'تنظیمات' };
+    const titles = { prices:'قیمت‌های زنده', analysis:'تحلیل‌های حرفه‌ای', signals:'سیگنال‌های پیشنهادی', notifications:'اعلان‌ها', calculator:'ماشین حساب طلا', settings:'تنظیمات' };
     document.getElementById('pageTitle').textContent = titles[page] || page;
     renderPage();
     if (window.innerWidth <= 968) document.getElementById('sidebar').classList.remove('show');
@@ -670,6 +671,7 @@ function renderPage() {
     if (app.currentPage === 'prices')      { content.innerHTML = renderPricesPage();    setTimeout(renderCharts, 100); }
     else if (app.currentPage === 'analysis') { content.innerHTML = renderAnalysisPage(); }
     else if (app.currentPage === 'signals')  { content.innerHTML = renderSignalsPage();  }
+    else if (app.currentPage === 'notifications') { content.innerHTML = renderNotificationsPage(); }
     else if (app.currentPage === 'calculator') { content.innerHTML = renderCalculatorPage(); }
     else if (app.currentPage === 'settings')   { content.innerHTML = renderSettingsPage();  }
 }
@@ -984,6 +986,100 @@ function renderCalculatorPage() {
 }
 
 // ============================================================
+// RENDER: NOTIFICATIONS PAGE
+// ============================================================
+function renderNotificationsPage() {
+    const notificationSupported = typeof Notification !== 'undefined';
+    const notificationPermission = notificationSupported ? Notification.permission : 'unsupported';
+    const highSignals = app.signals.filter(s => s.priority === 'high');
+    
+    return `
+        <h2 style="color:var(--accent-gold);margin-bottom:1.5rem;">🔔 مرکز اعلان‌ها</h2>
+        
+        <div class="cards-grid">
+            <!-- وضعیت سیستم -->
+            <div class="card">
+                <div class="card-header"><div class="card-title"><span class="card-icon">📊</span><span>وضعیت</span></div></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                    <div style="text-align:center;padding:1rem;background:var(--bg-primary);border-radius:0.5rem;">
+                        <div style="font-size:2rem;">${notificationPermission === 'granted' ? '✅' : '❌'}</div>
+                        <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.5rem;">مجوز</div>
+                    </div>
+                    <div style="text-align:center;padding:1rem;background:var(--bg-primary);border-radius:0.5rem;">
+                        <div style="font-size:2rem;">${app.notificationsEnabled ? '🔔' : '🔕'}</div>
+                        <div style="font-size:0.8rem;color:var(--text-secondary);margin-top:0.5rem;">اعلان</div>
+                    </div>
+                </div>
+                ${!notificationSupported ? '<div class="error" style="margin-top:1rem;">مرورگر پشتیبانی نمی‌کنه</div>' :
+                  notificationPermission === 'default' ? '<button class="btn btn-primary" onclick="enableNotifications()" style="width:100%;margin-top:1rem;">فعال‌سازی</button>' : 
+                  notificationPermission === 'denied' ? '<div class="error" style="margin-top:1rem;">از تنظیمات مرورگر اجازه دهید</div>' : 
+                  `<div style="margin-top:1rem;">
+                      <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                          <input type="checkbox" ${app.notificationsEnabled ? 'checked' : ''} onchange="toggleNotifications(this.checked)" style="width:auto;">
+                          <span style="font-size:0.9rem;">فعال</span>
+                      </label>
+                  </div>`}
+            </div>
+            
+            <!-- سیگنال‌های high -->
+            <div class="card">
+                <div class="card-header"><div class="card-title"><span class="card-icon">🎯</span><span>سیگنال‌های بالا (${highSignals.length})</span></div></div>
+                ${highSignals.length === 0 ? '<div style="text-align:center;padding:1.5rem;color:var(--text-secondary);font-size:0.9rem;">سیگنالی نیست</div>' :
+                    `<div style="max-height:200px;overflow-y:auto;">
+                        ${highSignals.slice(0,3).map(s => `<div style="padding:0.75rem;background:var(--bg-primary);border-radius:0.5rem;margin-bottom:0.5rem;border-left:3px solid ${s.type==='buy'?'var(--accent-green)':'var(--accent-red)'};">
+                            <div style="font-size:0.85rem;font-weight:bold;">${s.title}</div>
+                        </div>`).join('')}
+                    </div>
+                    ${notificationSupported && notificationPermission === 'granted' ? 
+                        '<button class="btn btn-success" onclick="sendSignalNotificationsNow()" style="width:100%;margin-top:0.75rem;font-size:0.9rem;">📤 ارسال اعلان</button>' : ''}`}
+            </div>
+        </div>
+        
+        <!-- تست -->
+        ${notificationSupported && notificationPermission === 'granted' ? `
+        <div class="card">
+            <div class="card-header"><div class="card-title"><span class="card-icon">🧪</span><span>تست</span></div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1rem;">
+                <button class="btn btn-warning" onclick="testNotification()" style="padding:0.75rem;font-size:0.9rem;">🧪 اعلان</button>
+                <button class="btn btn-primary" onclick="testSound()" style="padding:0.75rem;font-size:0.9rem;">🔊 صدا</button>
+            </div>
+            <label style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;padding:0.75rem;background:var(--bg-primary);border-radius:0.5rem;">
+                <input type="checkbox" ${app.soundEnabled ? 'checked' : ''} onchange="toggleSound(this.checked)" style="width:auto;">
+                <span style="font-size:0.9rem;">پخش صدا</span>
+            </label>
+        </div>` : ''}
+        
+        <!-- هشدارهای سفارشی -->
+        <div class="card">
+            <div class="card-header"><div class="card-title"><span class="card-icon">⚙️</span><span>هشدارهای سفارشی (${app.customAlerts?app.customAlerts.length:0})</span></div></div>
+            <form onsubmit="event.preventDefault();saveNewAlert();" style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1rem;">
+                <select id="alertPriceType" style="grid-column:1/-1;font-size:0.9rem;">
+                    <option value="goldPrice">انس طلا</option>
+                    <option value="usdRate">دلار</option>
+                    <option value="coinPrice">سکه</option>
+                    <option value="geram18Market">طلای 18</option>
+                </select>
+                <select id="alertCondition" style="font-size:0.9rem;"><option value="above">بالاتر از</option><option value="below">پایین‌تر از</option></select>
+                <input type="number" id="alertThreshold" placeholder="مقدار" step="0.01" required style="font-size:0.9rem;">
+                <button type="submit" class="btn btn-primary" style="grid-column:1/-1;padding:0.75rem;font-size:0.9rem;">➕ افزودن</button>
+            </form>
+            <div style="max-height:250px;overflow-y:auto;">
+                ${!app.customAlerts||app.customAlerts.length===0?'<div style="text-align:center;padding:1rem;color:var(--text-secondary);font-size:0.85rem;">هیچ هشداری نیست</div>':
+                    app.customAlerts.map(a=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.65rem;background:var(--bg-primary);border-radius:0.5rem;margin-bottom:0.5rem;">
+                        <div style="font-size:0.8rem;"><strong>${a.priceLabel}</strong> ${a.condition==='above'?'>':'<'} ${formatNumber(a.threshold)} ${a.unit}</div>
+                        <button onclick="removeCustomAlert(${a.id})" class="btn btn-danger" style="padding:0.25rem 0.5rem;font-size:0.75rem;">×</button>
+                    </div>`).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function sendSignalNotificationsNow() {
+    checkAndNotifySignals();
+    showNotification('✅ اعلان ارسال شد');
+}
+
+// ============================================================
 // RENDER: SETTINGS
 // ============================================================
 function renderSettingsPage() {
@@ -1122,8 +1218,15 @@ async function requestNotificationPermission() {
     }
     
     if (Notification.permission !== 'denied') {
-        const permission = await Notification.requestPermission();
-        return permission === 'granted';
+        try {
+            // Chrome needs user interaction before requesting permission
+            const permission = await Notification.requestPermission();
+            console.log('Notification permission:', permission);
+            return permission === 'granted';
+        } catch (error) {
+            console.error('Error requesting notification permission:', error);
+            return false;
+        }
     }
     
     return false;
