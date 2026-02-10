@@ -344,6 +344,7 @@
 // ============================================================
 const WORKER_API_URL = 'https://fancy-cloud-73d3.yousef7777t.workers.dev/api/price';
 const HISTORY_API_URL = 'https://goldyar-collector.yousef7777t.workers.dev/history';
+const ANALYSIS_API_URL = 'https://goldyar-analysis.yousef7777t.workers.dev';
 
 const DB = {
     getUsers: () => JSON.parse(localStorage.getItem('goldyar_users') || '[]'),
@@ -454,7 +455,7 @@ function initDashboard() {
 }
 function updateUserInfo() {
     document.getElementById('userInfo').innerHTML = `
-        <div class="user-email">${app.user?.email || 'مهمان'}</div>
+        <div class="user-email">${app.user && app.user.email ? app.user.email : 'مهمان'}</div>
         <div class="user-status">⭐ افتتاحیه - پرو رایگان</div>`;
 }
 
@@ -551,48 +552,115 @@ function saveEditedPrice() {
 // ============================================================
 // CALCULATE (تحلیل)
 // ============================================================
-function calculate() {
-    const p = app.prices;
-    const mesghalTheo = (p.goldPrice * p.usdRate) / 9.5742;
-    const diffMesghal = mesghalTheo - p.mesghalMarket;
-    const mesghalPercent = p.mesghalMarket ? ((diffMesghal / p.mesghalMarket) * 100).toFixed(2) : '0';
+// ============================================================
+// CALCULATE (دریافت تحلیل از Worker)
+// ============================================================
+async function calculate() {
+    try {
+        const response = await fetch(`${ANALYSIS_API_URL}/api/analyze`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(app.prices)
+        });
+        
+        if (!response.ok) throw new Error('خطا در دریافت تحلیل');
+        
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+            // تبدیل data از Worker به فرمت قدیمی برای سازگاری
+            const a = result.data;
+            return {
+                mesghalTheo: a.mesghal.theoretical,
+                diffMesghal: a.mesghal.diff,
+                mesghalPercent: a.mesghal.percent,
+                geram18Theo1: a.geram18.algo1,
+                geram18Theo2: a.geram18.algo2,
+                geram18Theo3: a.geram18.algo3,
+                geram18Avg: a.geram18.average,
+                diffGeram18: a.geram18.diff,
+                coinRatio: a.coin.ratio,
+                coinSignal: a.coin.signal,
+                gsRatio: a.goldSilver.ratio,
+                realUsdPrice: a.usd.real,
+                usdDiff: a.usd.diff,
+                usdSignal: a.usd.signal,
+                dirhamUsdCalc: a.dirham.calculated,
+                dirhamUsdDiff: a.dirham.diff,
+                dirhamUsdSignal: a.dirham.signal,
+                uaeGold18Calc: a.uaeGold.calculated,
+                uaeGoldDiff: a.uaeGold.diff,
+                uaeGoldSignal: a.uaeGold.signal,
+                uaeGoldSignalText: getUaeSignalText(a.uaeGold.signal)
+            };
+        }
+    } catch (error) {
+        console.error('❌ خطا در دریافت تحلیل:', error);
+    }
+    
+    // اگه Worker کار نکرد، داده خالی برگردون
+    return {
+        mesghalTheo: 0, diffMesghal: 0, mesghalPercent: '0',
+        geram18Theo1: 0, geram18Theo2: 0, geram18Theo3: 0, geram18Avg: 0, diffGeram18: 0,
+        coinRatio: '0', coinSignal: 'hold', gsRatio: '0',
+        realUsdPrice: 0, usdDiff: 0, usdSignal: 'normal',
+        dirhamUsdCalc: 0, dirhamUsdDiff: 0, dirhamUsdSignal: 'normal',
+        uaeGold18Calc: 0, uaeGoldDiff: 0, uaeGoldSignal: 'normal', uaeGoldSignalText: 'وضعیت عادی'
+    };
+}
 
-    const geram18Theo1 = ((p.goldPrice / 31.1035) * p.usdRate) * 0.75;
-    const geram18Theo2 = (p.goldPrice * p.usdRate / 31.103) * 0.750;
-    const geram18Theo3 = (p.goldPrice * p.usdRate) / 41.4265;
-    const geram18Avg = (geram18Theo1 + geram18Theo2 + geram18Theo3) / 3;
-    const diffGeram18 = geram18Avg - p.geram18Market;
-
-    const coinRatio = p.geram18Market ? (p.coinPrice / p.geram18Market).toFixed(2) : '0';
-    const coinSignal = coinRatio <= 9.7 ? 'buy_coin' : coinRatio >= 11.3 ? 'buy_gold' : 'hold';
-    const gsRatio = p.silverPrice ? (p.goldPrice / p.silverPrice).toFixed(2) : '0';
-
-    const realUsdPrice = p.goldPrice ? (p.geram18Market / p.goldPrice) * 41.5 : 0;
-    const usdDiff = realUsdPrice - p.usdRate;
-    const usdSignal = usdDiff > 20000000 ? 'negative_bubble' : usdDiff < -20000000 ? 'positive_bubble' : 'normal';
-
-    const dirhamUsdCalc = p.dirhamRate * 3.67;
-    const dirhamUsdDiff = dirhamUsdCalc - p.usdRate;
-    const dirhamUsdSignal = Math.abs(dirhamUsdDiff) > 10000000 ? (dirhamUsdDiff > 0 ? 'expensive' : 'cheap') : 'normal';
-
-    const uaeGold18Calc = p.dirhamRate * p.gold18UAE;
-    const uaeGoldDiff = uaeGold18Calc - p.geram18Market;
-
-    let uaeGoldSignal = 'normal', uaeGoldSignalText = 'وضعیت عادی';
-    if (uaeGoldDiff > 9000000)       { uaeGoldSignal = 'best_buy_iran';  uaeGoldSignalText = '🟢 بهترین موقعیت خرید از ایران'; }
-    else if (uaeGoldDiff > 7000000)  { uaeGoldSignal = 'good_buy_iran';  uaeGoldSignalText = '🟢 موقعیت خرید از ایران'; }
-    else if (uaeGoldDiff > 3500000)  { uaeGoldSignal = 'step_buy';       uaeGoldSignalText = '🟡 موقعیت خرید پله‌ای'; }
-    else if (uaeGoldDiff < -9000000) { uaeGoldSignal = 'best_sell_iran'; uaeGoldSignalText = '🔴 بهترین موقعیت فروش از ایران'; }
-    else if (uaeGoldDiff < -7000000) { uaeGoldSignal = 'good_sell_iran'; uaeGoldSignalText = '🔴 موقعیت فروش از ایران'; }
-    else if (uaeGoldDiff < -3500000) { uaeGoldSignal = 'step_sell';      uaeGoldSignalText = '🟡 موقعیت فروش پله‌ای'; }
-
-    return { mesghalTheo, diffMesghal, mesghalPercent, geram18Theo1, geram18Theo2, geram18Theo3, geram18Avg, diffGeram18, coinRatio, coinSignal, gsRatio, realUsdPrice, usdDiff, usdSignal, dirhamUsdCalc, dirhamUsdDiff, dirhamUsdSignal, uaeGold18Calc, uaeGoldDiff, uaeGoldSignal, uaeGoldSignalText };
+function getUaeSignalText(signal) {
+    const texts = {
+        'best_buy_iran': '🟢 بهترین موقعیت خرید از ایران',
+        'good_buy_iran': '🟢 موقعیت خرید از ایران',
+        'step_buy': '🟡 موقعیت خرید پله‌ای',
+        'best_sell_iran': '🔴 بهترین موقعیت فروش از ایران',
+        'good_sell_iran': '🔴 موقعیت فروش از ایران',
+        'step_sell': '🟡 موقعیت فروش پله‌ای',
+        'normal': 'وضعیت عادی'
+    };
+    return texts[signal] || 'وضعیت عادی';
 }
 
 // ============================================================
 // ✅ CALCULATE SIGNALS — این تابع قبلاً نداشتید!
 // ============================================================
-function calculateSignals() {
+// ============================================================
+// CALCULATE SIGNALS (با استفاده از Analysis Worker)
+// ============================================================
+async function calculateSignals() {
+    try {
+        // ارسال قیمت‌ها به Worker برای محاسبه سیگنال‌ها
+        const response = await fetch(`${ANALYSIS_API_URL}/api/calculate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(app.prices)
+        });
+        
+        if (!response.ok) {
+            throw new Error('خطا در دریافت سیگنال‌ها از سرور');
+        }
+        
+        const result = await response.json();
+        
+        if (result.success && result.signals) {
+            app.signals = result.signals;
+            console.log('✅ سیگنال‌ها از Worker دریافت شد:', app.signals.length);
+        } else {
+            console.warn('⚠️ پاسخ Worker معتبر نیست، استفاده از محاسبه محلی');
+            calculateSignalsLocal();
+        }
+    } catch (error) {
+        console.error('❌ خطا در دریافت سیگنال‌ها:', error);
+        // fallback به محاسبه محلی
+        calculateSignalsLocal();
+    }
+}
+
+// Fallback: محاسبه محلی (برای زمانی که Worker در دسترس نیست)
+function calculateSignalsLocal() {
     app.signals = [];
     const c = calculate();
     const p = app.prices;
@@ -666,10 +734,14 @@ function calculateSignals() {
 // ============================================================
 // RENDER PAGE ROUTER
 // ============================================================
-function renderPage() {
+async function renderPage() {
     const content = document.getElementById('pageContent');
     if (app.currentPage === 'prices')      { content.innerHTML = renderPricesPage();    setTimeout(renderCharts, 100); }
-    else if (app.currentPage === 'analysis') { content.innerHTML = renderAnalysisPage(); }
+    else if (app.currentPage === 'analysis') { 
+        content.innerHTML = '<div style="text-align:center;padding:3rem;"><div class="loading">⏳ در حال بارگذاری تحلیل‌ها...</div></div>';
+        const analysisHTML = await renderAnalysisPage();
+        content.innerHTML = analysisHTML;
+    }
     else if (app.currentPage === 'signals')  { content.innerHTML = renderSignalsPage();  }
     else if (app.currentPage === 'notifications') { content.innerHTML = renderNotificationsPage(); }
     else if (app.currentPage === 'calculator') { content.innerHTML = renderCalculatorPage(); }
@@ -752,8 +824,8 @@ function renderPricesPage() {
 // ============================================================
 // RENDER: ANALYSIS PAGE  (فقط یک نسخه — شبیه عکس شما)
 // ============================================================
-function renderAnalysisPage() {
-    const c = calculate();
+async function renderAnalysisPage() {
+    const c = await calculate();
     const p = app.prices;
 
     // Helper: signal box HTML
@@ -1172,7 +1244,7 @@ function renderSettingsPage() {
             </div>
             <div class="card">
                 <div class="card-header"><div class="card-title"><span class="card-icon">👤</span><span>اطلاعات حساب</span></div></div>
-                <div class="info-box"><strong>ایمیل:</strong> ${app.user?.email || 'مهمان'}<br><strong>وضعیت:</strong> ⭐ پرو فعال (افتتاحیه)<br><strong>اعتبار:</strong> رایگان</div>
+                <div class="info-box"><strong>ایمیل:</strong> ${app.user && app.user.email ? app.user.email : 'مهمان'}<br><strong>وضعیت:</strong> ⭐ پرو فعال (افتتاحیه)<br><strong>اعتبار:</strong> رایگان</div>
             </div>
             <div class="card">
                 <div class="card-header"><div class="card-title"><span class="card-icon">⭐</span><span>مزایای پرو</span></div></div>
